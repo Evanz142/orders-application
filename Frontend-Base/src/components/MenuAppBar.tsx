@@ -9,9 +9,11 @@ import AccountCircle from '@mui/icons-material/AccountCircle';
 import MenuItem from '@mui/material/MenuItem';
 import Menu from '@mui/material/Menu';
 
+const sus = 1;
+const sus2 = 2;
 
 export default function MenuAppBar() {
-  const [auth, setAuth] = React.useState(true);
+  // const [auth, setAuth] = React.useState(true);
   const [anchorEl, setAnchorEl] = React.useState(null);
 
   const handleMenu = (event: { currentTarget: React.SetStateAction<any>; }) => {
@@ -50,7 +52,7 @@ export default function MenuAppBar() {
           <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
             Evan's Order App
           </Typography>
-          {auth && (
+          {true && (
             <div>
               <IconButton
                 size="large"

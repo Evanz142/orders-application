@@ -1,14 +1,16 @@
+// Program.cs
 using Microsoft.EntityFrameworkCore;
 using Api.Models;
+using Api.Repositories;
 
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllers();
 builder.Services.AddDbContext<OrderContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("MyDbContext")));
+builder.Services.AddScoped<IOrderRepository, OrderRepository>(); // register repository layer
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
-
 builder.Services.AddCors(options =>
 {
     options.AddDefaultPolicy(builder =>
@@ -19,9 +21,7 @@ builder.Services.AddCors(options =>
     });
 });
 
-
 var app = builder.Build();
-
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
@@ -29,6 +29,7 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseDefaultFiles();
+
 app.UseStaticFiles();
 
 app.UseHttpsRedirection();

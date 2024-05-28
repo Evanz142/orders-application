@@ -1,6 +1,5 @@
 import React from 'react';
-import { DataGrid, GridColumnVisibilityModel, GridToolbar, GridToolbarQuickFilter } from '@mui/x-data-grid';
-import { Portal } from '@mui/material';
+import { DataGrid } from '@mui/x-data-grid';
 import EditOrderButton from './EditOrderButton.tsx';
 
 /*
