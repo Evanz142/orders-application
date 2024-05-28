@@ -8,13 +8,16 @@ import MenuIcon from '@mui/icons-material/Menu';
 import AccountCircle from '@mui/icons-material/AccountCircle';
 import MenuItem from '@mui/material/MenuItem';
 import Menu from '@mui/material/Menu';
+import Drawer from '@mui/material/Drawer/Drawer';
+import SideDrawer from './SideDrawer.tsx';
 
 const sus = 1;
 const sus2 = 2;
 
 export default function MenuAppBar() {
-  // const [auth, setAuth] = React.useState(true);
+  const [auth, setAuth] = React.useState(true);
   const [anchorEl, setAnchorEl] = React.useState(null);
+  const [open, setOpen] = React.useState(false);
 
   const handleMenu = (event: { currentTarget: React.SetStateAction<any>; }) => {
     setAnchorEl(event.currentTarget);
@@ -22,6 +25,10 @@ export default function MenuAppBar() {
 
   const handleClose = () => {
     setAnchorEl(null);
+  };
+
+  const toggleDrawer = (newOpen: boolean) => () => {
+    setOpen(newOpen);
   };
 
   return (
@@ -46,13 +53,17 @@ export default function MenuAppBar() {
             color="inherit"
             aria-label="menu"
             sx={{ mr: 2 }}
+            onClick={toggleDrawer(true)}
           >
             <MenuIcon />
           </IconButton>
+          <Drawer open={open} onClose={toggleDrawer(false)}>
+            <SideDrawer toggleDrawer={toggleDrawer}></SideDrawer>
+          </Drawer>
           <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
             Evan's Order App
           </Typography>
-          {true && (
+          {auth && (
             <div>
               <IconButton
                 size="large"
