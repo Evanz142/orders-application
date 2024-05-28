@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Api.Models;
+using Microsoft.CodeAnalysis.Elfie.Serialization;
 
 namespace Api.Controllers
 {
@@ -31,17 +32,15 @@ namespace Api.Controllers
         [HttpPut]
         public async Task<IActionResult> PutOrder(Order order)
         {
-
             _context.Entry(order).State = EntityState.Modified;
-
             try
             {
                 await _context.SaveChangesAsync();
             }
             catch (DbUpdateConcurrencyException)
             {
-                /*
-                if (!OrderExists(order.id))
+                
+                if (!OrderExists(order.Id))
                 {
                     return NotFound();
                 }
@@ -49,28 +48,10 @@ namespace Api.Controllers
                 {
                     throw;
                 }
-                */
-                return NotFound();
             }
 
             return NoContent();
         }
-
-        /*
-        // GET: api/Orders/5
-        [HttpGet("{id}")]
-        public async Task<ActionResult<Order>> GetOrder(long id)
-        {
-            var order = await _context.Orders.FindAsync(id);
-
-            if (order == null)
-            {
-                return NotFound();
-            }
-
-            return order;
-        }
-        */
 
         // POST: api/Orders
         [HttpPost]
@@ -106,6 +87,49 @@ namespace Api.Controllers
         {
             return await _context.Orders.Where(o => o.OrderType == type).ToListAsync();
         }
+
+        // GET: api/Orders/ByString/{string}
+        [HttpGet("ByString/{string}")]
+        public async Task<ActionResult<IEnumerable<Order>>> GetOrdersByString(String searchString)
+        {
+            searchString = searchString.ToLower();
+
+            // Filter orders based on the search criteria
+            var matchingOrders = await _context.Orders
+                .Where(o => o.Id.ToLower().Contains(searchString)
+                    || o.CustomerName.ToLower().Contains(searchString)
+                    || o.CreatedByUsername.ToLower().Contains(searchString))
+                .ToListAsync();
+
+            return matchingOrders;
+        }
+
+        // GET: api/Orders/Search
+        [HttpGet("Search")]
+        public async Task<ActionResult<IEnumerable<Order>>> SearchOrders(string searchString = "", OrderTypes? orderType = null)
+        {
+            IQueryable<Order> query = _context.Orders;
+
+            // Apply search by string if searchString is provided
+            if (!string.IsNullOrWhiteSpace(searchString))
+            {
+                searchString = searchString.ToLower();
+                query = query.Where(o => o.Id.ToLower().Contains(searchString)
+                    || o.CustomerName.ToLower().Contains(searchString)
+                    || o.CreatedByUsername.ToLower().Contains(searchString));
+            }
+
+            // Apply search by orderType if orderType is provided
+            if (orderType != 0 && orderType.HasValue)
+            {
+                query = query.Where(o => o.OrderType == orderType);
+            }
+
+            // Execute the query and return the matching orders
+            var matchingOrders = await query.ToListAsync();
+            return matchingOrders;
+        }
+
 
         private bool OrderExists(string id)
         {

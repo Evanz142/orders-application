@@ -9,11 +9,13 @@ import DeleteIcon from '@mui/icons-material/Delete';
 const uri = 'https://localhost:7045/api/Orders';
 
 interface OrderOptionsBarProps {
-  updateData: (type?: number) => void; // Define the type of the getData function
+  setFilterSearchString: (type: string) => void;
+  setFilterType: (type: number) => void;
+  updateData: () => void; // Define the type of the getData function
   apiRef: any; // apiRef for the data table
 }
 
-const OrderOptionsBar: React.FC<OrderOptionsBarProps> = ({ updateData, apiRef }) => {
+const OrderOptionsBar: React.FC<OrderOptionsBarProps> = ({ setFilterSearchString, setFilterType, updateData, apiRef }) => {
   const [orderTypeFilter, setOrderTypeFilter] = React.useState({
     orderType: '',
   });
@@ -24,7 +26,7 @@ const OrderOptionsBar: React.FC<OrderOptionsBarProps> = ({ updateData, apiRef })
       ...prevState,
       [name]: value
     }));
-    updateData(value);
+    setFilterType(value);
   };
 
   const deleteOrder = (id: string) => {
@@ -51,15 +53,15 @@ const OrderOptionsBar: React.FC<OrderOptionsBarProps> = ({ updateData, apiRef })
         spacing={{ xs: 1, sm: 2, md: 4 }}
         >
             <div></div>
-            <div id="filter-panel"></div>
-            {/* <Search></Search> */}
+            {/* <div id="filter-panel"></div> */}
+            <Search setFilterSearchString={setFilterSearchString}></Search>
             <CreateOrderButton updateData={updateData}></CreateOrderButton>
             <Button onClick={deleteHandler} variant="contained"><DeleteIcon style={{paddingRight: 10}}></DeleteIcon> Delete Selected</Button>
-            <div><DropdownSelect
+            <DropdownSelect
             id='orderTypeDropdown'
             name="orderType"
             value={orderTypeFilter.orderType}
-            onChange={handleOrderTypeFilterChange}></DropdownSelect></div>
+            onChange={handleOrderTypeFilterChange}></DropdownSelect>
         </Stack>
     </div>
   );

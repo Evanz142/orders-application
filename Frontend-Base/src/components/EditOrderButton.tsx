@@ -36,9 +36,10 @@ interface EditOrderButtonProps {
   createdByUsername: string;
   customerName: string;
   orderType: number;
+  createdDate: string;
 }
 
-const EditOrderButton: React.FC<EditOrderButtonProps> = ({ updateData, id, createdByUsername, customerName, orderType }) => {
+const EditOrderButton: React.FC<EditOrderButtonProps> = ({ updateData, id, createdByUsername, customerName, orderType, createdDate }) => {
   const [open, setOpen] = React.useState(false);
   const [formData, setFormData] = React.useState({
     createdByUsername: createdByUsername,
@@ -50,10 +51,6 @@ const EditOrderButton: React.FC<EditOrderButtonProps> = ({ updateData, id, creat
     setOpen(true);
   };
   const handleClose = () => setOpen(false);
-  const generateID = () => {
-    const chars = "AaBbCcDdEeFf1234567890";
-    return [8,4,4,4,12].map(n => Array.from({ length: n }, () => chars[Math.floor(Math.random() * chars.length)]).join("")).join("-");
-  };
 
   // for managing state with the form data
   const handleChange = (event: { target: { name: any; value: any; }; }) => {
@@ -68,6 +65,7 @@ const EditOrderButton: React.FC<EditOrderButtonProps> = ({ updateData, id, creat
     const order = {
         id: id,
         //createdDate: new Date().toJSON(),
+        createdDate: createdDate,
         
         ...formData
     }

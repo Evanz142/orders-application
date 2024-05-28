@@ -10,10 +10,12 @@ import DataTable from './components/DataTable.js';
 import { useGridApiRef } from '@mui/x-data-grid';
 
 const uri = 'https://localhost:7045/api/Orders';
-const typeUri = 'https://localhost:7045/api/Orders/ByType';
+const filterUri = 'https://localhost:7045/api/Orders/Search';
 
 function App() {
   const [data, setData] = useState<Order[]>([]);
+  const [filterType, setFilterType] = useState<number>(0);
+  const [filterSearchString, setFilterSearchString] = useState<string>("");
   const apiRef = useGridApiRef();
 
   interface Order {
@@ -27,6 +29,16 @@ function App() {
   useEffect(() => {
     getData();
   }, []);
+
+  // update the data whenever the order type filter changes
+  useEffect(() => {
+    getData();
+  }, [filterType]);
+
+  // update the data whenever the string search filter changes
+  useEffect(() => {
+    getData();
+  }, [filterSearchString]);
 
   // format the order type to make it readable and not just a number
   function formatOrderType(orderType: number): string {
@@ -46,7 +58,7 @@ function App() {
         default:
             return '';
     }
-}
+  }
 
   // format the date string so that it's readable
   const formatDateString = (dateString: string): string => {
@@ -61,15 +73,18 @@ function App() {
     return orders.map(order => {
       return {
         ...order,
-        createdDate: formatDateString(order.createdDate),
+        createdDateString: formatDateString(order.createdDate),
         orderType: formatOrderType(order.orderType)
       };
     });
   };
 
-  const getData = (type?: number) => {
+  const getData = () => {
+    //setFilterType(type);
+    //setFilterSearchString(searchString);
+    
     console.log("getting data now!!");
-    if (!type) { // fetch for when there is no specified order type filter
+    if (!filterType && !filterSearchString) { // fetch for when there is no specified filter
       fetch(uri)
       .then(response => response.json())
       .then(data => {
@@ -80,8 +95,8 @@ function App() {
       })
       .catch(error => console.error('Unable to get items.', error));  
     }
-    else { // fetch for when there is a specified order type filter
-      fetch(`${typeUri}/${type}`)
+    else { // fetch for when there is a filter
+      fetch(`${filterUri}?searchString=${filterSearchString}&orderType=${filterType}`)
       .then(response => response.json())
       .then(data => {
         // update the date strings
@@ -98,9 +113,13 @@ function App() {
       <meta name="viewport" content="initial-scale=1, width=device-width" />
       <MenuAppBar></MenuAppBar>
       <br></br>
-      <OrderOptionsBar apiRef={apiRef} updateData={getData}></OrderOptionsBar>
+      <OrderOptionsBar setFilterSearchString={setFilterSearchString} setFilterType={setFilterType} apiRef={apiRef} updateData={getData}></OrderOptionsBar>
       <br></br>
-      <DataTable updateData={getData} apiRef={apiRef} data={data}></DataTable>
+      <DataTable 
+        updateData={getData}
+        apiRef={apiRef}
+        data={data}
+      ></DataTable>
 
       {/* Get data button for testing */}
       <br></br>

@@ -1,10 +1,9 @@
 import React from 'react';
-import { DataGrid, GridToolbar, GridToolbarQuickFilter } from '@mui/x-data-grid';
+import { DataGrid, GridColumnVisibilityModel, GridToolbar, GridToolbarQuickFilter } from '@mui/x-data-grid';
 import { Portal } from '@mui/material';
-import { IconButton } from '@mui/material';
-import EditIcon from '@mui/icons-material/Edit';
 import EditOrderButton from './EditOrderButton.tsx';
 
+/*
 function MyCustomToolbar(props: any) {
   return (
     <React.Fragment>
@@ -15,6 +14,7 @@ function MyCustomToolbar(props: any) {
     </React.Fragment>
   );
 }
+*/
 
 type StringToNumber = {
   [key: string]: number;
@@ -36,7 +36,7 @@ interface DataTableProps {
 
 const columns = (updateData: () => void) => [
   { field: 'id', headerName: 'Order ID', width: 300 },
-  { field: 'createdDate', headerName: 'Creation Date', width: 200 },
+  { field: 'createdDateString', headerName: 'Creation Date', width: 200 },
   { field: 'createdByUsername', headerName: 'Created By', width: 200 },
   { field: 'orderType', headerName: 'Order Type', width: 250 },
   { field: 'customerName', headerName: 'Customer', width: 200 },
@@ -57,25 +57,31 @@ const columns = (updateData: () => void) => [
           createdByUsername={params.row.createdByUsername} 
           customerName={params.row.customerName}
           orderType={orderTypeMap[params.row.orderType]}
+          createdDate={params.row.createdDate}
         >
         </EditOrderButton>
       );
     },
   },
+  { field: 'createdDate'}
 ];
 
 const DataTable: React.FC<DataTableProps> = ({ data, apiRef, updateData }) => {
+
   return (
     <div style={{ minHeight: '100%', width: '98%', margin: '0 auto', textAlign: 'center' }}>
       <DataGrid
+        autoHeight {...data}
         rows={data}
         columns={columns(updateData)}
         apiRef={apiRef}
         disableColumnFilter
         disableColumnSelector
         disableDensitySelector
-        slots={{ toolbar: MyCustomToolbar }}
-        
+        // slots={{ toolbar: MyCustomToolbar }}
+        columnVisibilityModel={{
+          createdDate: false,
+        }}
         initialState={{
           pagination: {
             paginationModel: { page: 0, pageSize: 10 },
