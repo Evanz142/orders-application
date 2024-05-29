@@ -1,5 +1,6 @@
 // Controllers/OrdersController.cs
 using Microsoft.AspNetCore.Mvc;
+using Api.Dtos;
 using Api.Models;
 using Api.Repositories;
 using System.Collections.Generic;
@@ -24,6 +25,27 @@ namespace Api.Controllers
         public async Task<ActionResult<IEnumerable<Order>>> GetOrders()
         {
             return Ok(await _repository.GetAllOrders());
+        }
+
+        [HttpGet("BarData")]
+        public async Task<ActionResult<IEnumerable<BarChartDataDto>>> GetBarData()
+        {
+            var barData = await _repository.GetBarData();
+            return Ok(barData);
+        }
+
+        [HttpGet("ChartData")]
+        public async Task<ActionResult<IEnumerable<LineChartDataDto>>> GetChartData()
+        {
+            var chartData = await _repository.GetChartData();
+            return Ok(chartData);
+        }
+
+        [HttpGet("PieData")]
+        public async Task<ActionResult<IEnumerable<PieChartDataDto>>> GetPieData()
+        {
+            var pieData = await _repository.GetPieData();
+            return Ok(pieData);
         }
 
         [HttpGet("{id}")]

@@ -14,7 +14,10 @@ import SideDrawer from './SideDrawer.tsx';
 const sus = 1;
 const sus2 = 2;
 
-export default function MenuAppBar() {
+interface MenuAppBarProps {
+  textValue: string;
+}
+const MenuAppBar: React.FC<MenuAppBarProps> = ({ textValue }) => {
   const [auth, setAuth] = React.useState(true);
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [open, setOpen] = React.useState(false);
@@ -61,7 +64,7 @@ export default function MenuAppBar() {
             <SideDrawer toggleDrawer={toggleDrawer}></SideDrawer>
           </Drawer>
           <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-            Evan's Order App
+            {textValue}
           </Typography>
           {auth && (
             <div>
@@ -100,3 +103,5 @@ export default function MenuAppBar() {
     </Box>
   );
 }
+
+export default MenuAppBar;

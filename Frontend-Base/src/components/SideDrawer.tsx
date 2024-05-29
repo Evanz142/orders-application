@@ -9,22 +9,22 @@ import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 import ManageSearchIcon from '@mui/icons-material/ManageSearch';
 import ShowChartIcon from '@mui/icons-material/ShowChart';
-
-
+import { useNavigate } from 'react-router-dom';
 
 interface SideDrawerProps {
     toggleDrawer: (val: boolean) => React.MouseEventHandler<HTMLDivElement>;
 }
 
 const itemsMap: { [key: string]: { icon: React.ReactElement, href: string } } = {
-    'View Orders': { icon: <ManageSearchIcon />,  href: '/view-orders'},
-    'Statistics': { icon: <ShowChartIcon />, href: '/'},
+    'View Orders': { icon: <ManageSearchIcon />,  href: ''},
+    'Statistics': { icon: <ShowChartIcon />, href: 'stats'},
 };
 
 const SideDrawer: React.FC<SideDrawerProps> = ({ toggleDrawer }) => {
+    const navigate = useNavigate();
 
     const handleNavigation = (href: string) => {
-        //history.push(href);
+        navigate(`/${href}`);
         console.log("Redirecting to " + href);
     };
 
