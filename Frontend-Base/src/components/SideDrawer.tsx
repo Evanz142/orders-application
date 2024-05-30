@@ -16,7 +16,7 @@ interface SideDrawerProps {
 }
 
 const itemsMap: { [key: string]: { icon: React.ReactElement, href: string } } = {
-    'View Orders': { icon: <ManageSearchIcon />,  href: ''},
+    'View Orders': { icon: <ManageSearchIcon />,  href: 'home'},
     'Statistics': { icon: <ShowChartIcon />, href: 'stats'},
 };
 

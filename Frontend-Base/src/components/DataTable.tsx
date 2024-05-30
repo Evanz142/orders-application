@@ -2,19 +2,6 @@ import React from 'react';
 import { DataGrid } from '@mui/x-data-grid';
 import EditOrderButton from './EditOrderButton.tsx';
 
-/*
-function MyCustomToolbar(props: any) {
-  return (
-    <React.Fragment>
-      <Portal container={() => document.getElementById('filter-panel')!}>
-        <GridToolbarQuickFilter {...props} variant="outlined" />
-      </Portal>
-      <GridToolbar {...props} />
-    </React.Fragment>
-  );
-}
-*/
-
 type StringToNumber = {
   [key: string]: number;
 };
@@ -38,7 +25,7 @@ const columns = (updateData: () => void) => [
   { field: 'createdDateString', headerName: 'Creation Date', width: 200 },
   { field: 'createdByUsername', headerName: 'Created By', width: 200 },
   { field: 'orderType', headerName: 'Order Type', width: 250 },
-  { field: 'customerName', headerName: 'Customer', width: 200 },
+  { field: 'customerName', headerName: 'Customer', width: 300 },
   {
     field: 'editButton',
     headerName: '', // Empty string for header
@@ -77,16 +64,15 @@ const DataTable: React.FC<DataTableProps> = ({ data, apiRef, updateData }) => {
         disableColumnFilter
         disableColumnSelector
         disableDensitySelector
-        // slots={{ toolbar: MyCustomToolbar }}
         columnVisibilityModel={{
           createdDate: false,
         }}
         initialState={{
           pagination: {
-            paginationModel: { page: 0, pageSize: 10 },
+            paginationModel: { page: 0, pageSize: 12 },
           },
         }}
-        pageSizeOptions={[5, 10, 20]}
+        pageSizeOptions={[6, 12, 24]}
         checkboxSelection
       />
     </div>

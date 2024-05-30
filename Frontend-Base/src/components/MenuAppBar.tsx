@@ -10,6 +10,7 @@ import MenuItem from '@mui/material/MenuItem';
 import Menu from '@mui/material/Menu';
 import Drawer from '@mui/material/Drawer/Drawer';
 import SideDrawer from './SideDrawer.tsx';
+import { useSession } from '../contexts/SessionContext';
 
 const sus = 1;
 const sus2 = 2;
@@ -21,6 +22,7 @@ const MenuAppBar: React.FC<MenuAppBarProps> = ({ textValue }) => {
   const [auth, setAuth] = React.useState(true);
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [open, setOpen] = React.useState(false);
+  const { session, logout } = useSession();
 
   const handleMenu = (event: { currentTarget: React.SetStateAction<any>; }) => {
     setAnchorEl(event.currentTarget);
@@ -36,18 +38,6 @@ const MenuAppBar: React.FC<MenuAppBarProps> = ({ textValue }) => {
 
   return (
     <Box sx={{ flexGrow: 1 }}>
-      {/* <FormGroup>
-        <FormControlLabel
-          control={
-            <Switch
-              checked={auth}
-              onChange={handleChange}
-              aria-label="login switch"
-            />
-          }
-          label={auth ? 'Logout' : 'Login'}
-        />
-      </FormGroup> */}
       <AppBar position="static">
         <Toolbar>
           <IconButton
@@ -93,8 +83,8 @@ const MenuAppBar: React.FC<MenuAppBarProps> = ({ textValue }) => {
                 open={Boolean(anchorEl)}
                 onClose={handleClose}
               >
-                <MenuItem onClick={handleClose}>Profile</MenuItem>
-                <MenuItem onClick={handleClose}>My account</MenuItem>
+                <MenuItem onClick={handleClose}>My Account</MenuItem>
+                <MenuItem onClick={logout}>Logout</MenuItem>
               </Menu>
             </div>
           )}

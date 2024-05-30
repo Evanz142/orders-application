@@ -111,7 +111,7 @@ function OrdersPage() {
   return (
     <div className="App">
       <meta name="viewport" content="initial-scale=1, width=device-width" />
-      <MenuAppBar textValue="Evan's Order App"></MenuAppBar>
+      <MenuAppBar textValue="Order Manager"></MenuAppBar>
       <br></br>
       <OrderOptionsBar setFilterSearchString={setFilterSearchString} setFilterType={setFilterType} apiRef={apiRef} updateData={getData}></OrderOptionsBar>
       <br></br>
