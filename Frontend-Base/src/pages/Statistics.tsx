@@ -9,91 +9,71 @@ import BasicLineChart from '../components/charts/LineChart.js'
 import BasicPieChart from '../components/charts/PieChart.js';
 import BasicBarChart from '../components/charts/BarChart.js';
 
-import { useGridApiRef } from '@mui/x-data-grid';
-import { Box, Button, Grid, Paper, Stack, Typography, styled } from '@mui/material';
+import { Box, Stack, Typography } from '@mui/material';
 
-const uri = 'https://localhost:7045/api/Orders';
+const pieUri = 'https://localhost:7045/api/Orders/PieData';
+const lineUri = 'https://localhost:7045/api/Orders/ChartData';
 
 function StatisticsPage() {
-    const apiRef = useGridApiRef();
 
-    interface Order {
-        id: string;
-        orderType: any;
-        customerName: string;
-        createdDate: string;
-        createdByUsername: string;
-    }
+    // states for graph data
+    const [orderNumberTotal, setOrderNumberTotal] = useState<number>();
+    const [orderNumberMonth, setOrderNumberMonth] = useState<number>();
+    const [customerNumber, setCustomerNumber] = useState<number>(0);
 
+    // useEffect(() => { // Retrieving the data for the graphs
+    //     // PIE CHART
+    //     fetch(pieUri)
+    //     .then(response => response.json())
+    //     .then(data => {
+    //         setPieData(data);
+    //         setCustomerNumber(Object.keys(data).length);
+    //     })
+    //     .catch(error => console.error('Unable to get items.', error));
 
-    // format the order type to make it readable and not just a number
-    function formatOrderType(orderType: number): string {
-        switch (orderType) {
-            case 0:
-                return 'None';
-            case 1:
-                return 'Standard';
-            case 2:
-                return 'Sale Order';
-            case 3:
-                return 'Purchase Order';
-            case 4:
-                return 'Transfer Order';
-            case 5:
-                return 'Return Order';
-            default:
-                return '';
-        }
-    }
+    //     // LINE GRAPH
+    //     fetch(lineUri)
+    //     .then(response => response.json())
+    //     .then(data => {
+    //         setLineData(data);
+    //         console.log(data);
+    //     })
+    //     .catch(error => console.error('Unable to get items.', error));
+    // }, [])
 
-    // DATA GENERATION
+    useEffect(() => { // Animating the statistic numbers on page load
+        //console.log("Animation")
 
-    const generateID = () => {
-        const chars = "AaBbCcDdEeFf1234567890";
-        return [8,4,4,4,12].map(n => Array.from({ length: n }, () => chars[Math.floor(Math.random() * chars.length)]).join("")).join("-");
-    };
+        const revenueMonth = 8120432;
+        const customerRetention = 98;
 
-    const customers = ["Walmart", "Walmart", "Kroger", "Anheuser Busch", "Anheuser Busch", "Anheuser Busch", "Anheuser Busch", "Safeway", "Target", "Coca Cola", "Budweiser", "Coca Cola", "Coca Cola"];
+        const num1Element = document.getElementById('num1');
+        const num2Element = document.getElementById('num2');
+        const num3Element = document.getElementById('num3');
+        const num4Element = document.getElementById('num4');
+        const num5Element = document.getElementById('num5');
 
-    // Function to generate a random date with a weighted distribution towards recent dates
-    const generateWeightedDate = () => {
-        const now = Date.now();
-        const sixMonthsAgo = now - 182 * 24 * 60 * 60 * 1000; // Approx. 6 months in milliseconds
-        console.log("Six months ago: "+sixMonthsAgo);
-        const randomWeight = 1 - Math.exp(-Math.random()); // Exponential distribution favoring recent dates
-        const date = new Date(sixMonthsAgo + Math.random() * (now - sixMonthsAgo));
-        return date.toJSON();
-    };
+        num1Element.style.setProperty('--num1', '0');
+        num2Element.style.setProperty('--num2', '0');
+        num3Element.style.setProperty('--num3', '0');
+        num4Element.style.setProperty('--num4', '0');
+        num5Element.style.setProperty('--num5', '0');
 
-    // Function to generate a random order
-    const generateRandomOrder = () => {
-        return {
-            id: generateID(),
-            orderType: Math.floor(Math.random() * 5) + 1,
-            customerName: customers[Math.floor(Math.random() * customers.length)],
-            createdDate: generateWeightedDate(),
-            createdByUsername: "PJ"
-        };
-    };
-
-    const testFunction = () => {
-
-        for (let i = 0; i < 45; i++) {
-            const order = generateRandomOrder();
-            
-            fetch(uri, {
-                method: 'POST',
-                headers: {
-                    'Accept': 'application/json',
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(order)
-            })
-            .catch(error => console.error('Unable to add item.', error));
-            
-           //console.log(order);
-        }
-  }
+        setTimeout(() => {
+            try 
+            {
+                num1Element.style.setProperty('--num1', orderNumberTotal.toString());
+                num2Element.style.setProperty('--num2', orderNumberMonth.toString());
+                num3Element.style.setProperty('--num3', revenueMonth.toString());
+                num4Element.style.setProperty('--num4', customerNumber.toString());
+                num5Element.style.setProperty('--num5', customerRetention.toString());
+            }
+            catch (TypeError) {
+                // Error with initial loading. Can't toString() on undefined.
+            }
+        }, 50);
+        
+    }, [[], customerNumber]) 
 
   return (
     <div className="Statistics-header">
@@ -101,48 +81,42 @@ function StatisticsPage() {
         <MenuAppBar textValue="Statistics"></MenuAppBar>
         {/* <Button onClick={testFunction} variant="contained">Run Test Function</Button> */}
         <Stack style={{padding: '1%'}} direction="row" width="98%" textAlign="center" spacing={2}>
-            <Box /*style={{backgroundColor: '#1976D2'}}*/ className="statContainer" flexGrow={1}>
-                <Typography></Typography>
+            <Box className="statContainer" flexGrow={1}>
+                <Typography id="num1" variant="h2"></Typography>
+                <Typography variant="h4">total orders</Typography>
             </Box>
-            <Box /*style={{backgroundColor: '#4587C9'}}*/ className="statContainer" flexGrow={1}>
+            <Box className="statContainer" flexGrow={1}>
+                <Typography id="num2" variant="h2"></Typography>
+                <Typography variant="h4">monthly orders</Typography>
             </Box>
-            <Box /*style={{backgroundColor: '#7878CC'}}*/ className="statContainer" flexGrow={1}>
+            <Box className="statContainer" flexGrow={1}>
+                <Typography id="num3" variant="h2"></Typography>
+                <Typography variant="h4">month revenue</Typography>
             </Box>
-            <Box /*style={{backgroundColor: '#E5D9F2'}}*/ className="statContainer" flexGrow={1}>
+            <Box className="statContainer" flexGrow={1}>
+                <Typography id="num4" variant="h2"></Typography>
+                <Typography variant="h4">customers</Typography>
             </Box>
-            <Box /*style={{backgroundColor: '#C6D8E4'}}*/ className="statContainer" flexGrow={1}>
+            <Box justifyContent="center" className="statContainer" flexGrow={1}>
+                <div id="num5container">
+                    <Typography id="num5" variant="h2"></Typography>
+                    <Typography id="num6">%</Typography>
+                </div>
+                <Typography variant="h4">retention rate</Typography>
             </Box>
         </Stack>
 
         <Stack style={{paddingLeft: '1%', paddingRight: '1%'}} direction="row" width="98%" textAlign="center" spacing={2}>
             <Box className="dataContainer" flexGrow={1}>
-                <BasicLineChart></BasicLineChart>
+                <BasicLineChart updateOrderNumberTotal={setOrderNumberTotal} updateOrderNumberMonth={setOrderNumberMonth} ></BasicLineChart>
             </Box>
             <Box className="dataContainer" flexGrow={1}>
-                <BasicPieChart></BasicPieChart>
+                <BasicPieChart updateCustomers={setCustomerNumber} ></BasicPieChart>
             </Box>
             <Box className="dataContainer" flexGrow={1}>
                 <BasicBarChart></BasicBarChart>
             </Box>
         </Stack>
-        
-            {/* <br></br>
-        <Box sx={{ flexGrow: 1 }}>
-            <Grid container spacing={2}>
-                <Grid item xs={8}>
-                <Box className="dataContainer">xs=8</Box>
-                </Grid>
-                <Grid item xs={4}>
-                <Box className="dataContainer">xs=4</Box>
-                </Grid>
-                <Grid item xs={4}>
-                <Box className="dataContainer">xs=4</Box>
-                </Grid>
-                <Grid item xs={8}>
-                <Box className="dataContainer">xs=8</Box>
-                </Grid>
-            </Grid>
-        </Box> */}
     </div>
   );
 }

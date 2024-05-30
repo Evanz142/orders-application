@@ -7,8 +7,9 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllers();
 builder.Services.AddDbContext<OrderContext>(options =>
-    options.UseSqlServer(builder.Configuration.GetConnectionString("MyDbContext")));
+    options.UseNpgsql(builder.Configuration.GetConnectionString("MyDbContext")));
 builder.Services.AddScoped<IOrderRepository, OrderRepository>(); // register repository layer
+
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddCors(options =>

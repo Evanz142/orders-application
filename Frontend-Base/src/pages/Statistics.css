@@ -21,9 +21,93 @@ body {
 
 .statContainer {
   background-color: white;
-  padding: 15px;
+  width: 20%;
+  padding: 60px;
   border-radius: 15px;
   font-size: 200%;
-  color: white;
+  color: #1976D2;
 }
-  
+
+/* ANIMATIONS FOR NUMBERS ON STATISTICS PAGE */
+@property --num1 {
+  syntax: "<integer>";
+  initial-value: 0;
+  inherits: false;
+}
+#num1 {
+  transition: --num1 0.4s;
+  counter-set: num1 var(--num1);
+  font: 800 40px system-ui;
+}
+#num1::after {
+  content: counter(num1);
+}
+
+@property --num2 {
+  syntax: "<integer>";
+  initial-value: 0;
+  inherits: false;
+}
+#num2 {
+  transition: --num2 0.4s;
+  counter-set: num2 var(--num2);
+  font: 800 40px system-ui;
+}
+#num2::after {
+  content: counter(num2);
+}
+
+@property --num3 {
+  syntax: "<integer>";
+  initial-value: 0;
+  inherits: false;
+}
+#num3 {
+  transition: --num3 0.4s;
+  counter-set: num3 var(--num3);
+  font: 800 40px system-ui;
+}
+#num3::before {
+  content: '$';
+}
+#num3::after {
+  content: counter(num3);
+}
+
+@property --num4 {
+  syntax: "<integer>";
+  initial-value: 0;
+  inherits: false;
+}
+#num4 {
+  transition: --num4 0.4s;
+  counter-set: num4 var(--num4);
+  font: 800 40px system-ui;
+}
+#num4::after {
+  content: counter(num4);
+}
+
+@property --num5 {
+  syntax: "<integer>";
+  initial-value: 0;
+  inherits: false;
+}
+#num5 {
+  transition: --num5 0.4s;
+  counter-set: num5 var(--num5);
+  font: 800 40px system-ui;
+}
+#num5::after {
+  content: counter(num5);
+}
+#num6 {
+  font: 800 40px system-ui;
+}
+#num5container {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+}
+
+/* END ANIMATIONS FOR NUMBERS ON STATISTICS PAGE */

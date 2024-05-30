@@ -1,0 +1,13 @@
+This is my previous appsettings.json file before switching to supabase for my database hosting. I gitignored the new file because it contains a db password inside the connection string.
+{
+  "Logging": {
+    "LogLevel": {
+      "Default": "Information",
+      "Microsoft.AspNetCore": "Warning"
+    }
+  },
+  "AllowedHosts": "*",
+  "ConnectionStrings": {
+    "MyDbContext": "Server=localhost;Database=OrderDatabase;Trusted_Connection=True;TrustServerCertificate=True;" 
+  }
+}
