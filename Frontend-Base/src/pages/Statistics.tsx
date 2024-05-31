@@ -9,37 +9,21 @@ import BasicLineChart from '../components/charts/LineChart.js'
 import BasicPieChart from '../components/charts/PieChart.js';
 import BasicBarChart from '../components/charts/BarChart.js';
 
-import { Box, Stack, Typography } from '@mui/material';
+import { Box, Grid, Paper, Stack, Typography, styled } from '@mui/material';
 
-const pieUri = 'https://localhost:7045/api/Orders/PieData';
-const lineUri = 'https://localhost:7045/api/Orders/ChartData';
-
+const Item = styled(Paper)(({ theme }) => ({
+    backgroundColor: theme.palette.mode === 'dark' ? '#1A2027' : '#fff',
+    ...theme.typography.body2,
+    padding: theme.spacing(2),
+    textAlign: 'center',
+    color: theme.palette.text.secondary,
+  }));
 function StatisticsPage() {
 
     // states for graph data
     const [orderNumberTotal, setOrderNumberTotal] = useState<number>();
     const [orderNumberMonth, setOrderNumberMonth] = useState<number>();
     const [customerNumber, setCustomerNumber] = useState<number>(0);
-
-    // useEffect(() => { // Retrieving the data for the graphs
-    //     // PIE CHART
-    //     fetch(pieUri)
-    //     .then(response => response.json())
-    //     .then(data => {
-    //         setPieData(data);
-    //         setCustomerNumber(Object.keys(data).length);
-    //     })
-    //     .catch(error => console.error('Unable to get items.', error));
-
-    //     // LINE GRAPH
-    //     fetch(lineUri)
-    //     .then(response => response.json())
-    //     .then(data => {
-    //         setLineData(data);
-    //         console.log(data);
-    //     })
-    //     .catch(error => console.error('Unable to get items.', error));
-    // }, [])
 
     useEffect(() => { // Animating the statistic numbers on page load
         console.log("Animation")
@@ -74,7 +58,7 @@ function StatisticsPage() {
             }
         }, 50);
         
-    }, [[], customerNumber]) 
+    }, [[]]) 
 
   return (
     <div className="Statistics-header">
@@ -107,17 +91,27 @@ function StatisticsPage() {
             </Box>
         </Stack>
 
-        <Stack style={{paddingLeft: '1%', paddingRight: '1%'}} direction="row" width="98%" textAlign="center" spacing={2}>
-            <Box className="dataContainer" flexGrow={1}>
-                <BasicLineChart updateOrderNumberTotal={setOrderNumberTotal} updateOrderNumberMonth={setOrderNumberMonth} ></BasicLineChart>
-            </Box>
-            <Box className="dataContainer" flexGrow={1}>
-                <BasicPieChart updateCustomers={setCustomerNumber} ></BasicPieChart>
-            </Box>
-            <Box className="dataContainer" flexGrow={1}>
-                <BasicBarChart></BasicBarChart>
-            </Box>
-        </Stack>
+
+        <Box style={{paddingLeft: '1%', paddingRight: '1%'}} sx={{ flexGrow: 1 }}>
+            <Grid container spacing={{ xs: 2, md: 3 }} columns={{ xs: 4, sm: 8, md: 12 }}>
+                
+                <Grid item xs={2} sm={12} md={3.5} lg={3.5}>
+                    <Box className="dataContainer" flexGrow={1}>
+                        <BasicPieChart updateCustomers={setCustomerNumber} ></BasicPieChart>
+                    </Box>
+                </Grid>
+                <Grid item xs={5} sm={12} md={5} lg={5}>
+                    <Box className="dataContainer" flexGrow={1}>
+                        <BasicLineChart updateOrderNumberTotal={setOrderNumberTotal} updateOrderNumberMonth={setOrderNumberMonth} ></BasicLineChart>
+                    </Box>
+                </Grid>
+                <Grid item xs={2} sm={12} md={3.5} lg={3.5}>
+                    <Box className="dataContainer" flexGrow={1}>
+                        <BasicBarChart></BasicBarChart>
+                    </Box>
+                </Grid>
+            </Grid>
+        </Box>
     </div>
   );
 }
