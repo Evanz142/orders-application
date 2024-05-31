@@ -11,6 +11,8 @@ import Stack from '@mui/material/Stack';
 import DialogActions from '@mui/material/DialogActions';
 import { IconButton } from '@mui/material';
 import EditIcon from '@mui/icons-material/Edit';
+import { useSession } from '../contexts/SessionContext.js';
+import { useUserContext } from '../contexts/UserContext.js';
 
 
 
@@ -29,7 +31,6 @@ const style = {
 const uri = 'https://localhost:7045/api/Orders';
 
 interface EditOrderButtonProps {
-  updateData: () => void; // Define the type of the data array
   id: string;
   createdByUsername: string;
   customerName: string;
@@ -37,13 +38,15 @@ interface EditOrderButtonProps {
   createdDate: string;
 }
 
-const EditOrderButton: React.FC<EditOrderButtonProps> = ({ updateData, id, createdByUsername, customerName, orderType, createdDate }) => {
+const EditOrderButton: React.FC<EditOrderButtonProps> = ({ id, createdByUsername, customerName, orderType, createdDate }) => {
   const [open, setOpen] = React.useState(false);
   const [formData, setFormData] = React.useState({
     createdByUsername: createdByUsername,
     customerName: customerName,
     orderType: orderType,
   });
+  const { getToken } = useSession();
+  const { getData } = useUserContext();
   const handleOpen = (event: React.MouseEvent<HTMLButtonElement>) => {
     event.stopPropagation();
     setOpen(true);
@@ -68,17 +71,22 @@ const EditOrderButton: React.FC<EditOrderButtonProps> = ({ updateData, id, creat
         ...formData
     }
     console.log(order);
-
+    const token = getToken();
+    if (!token) {
+      console.error('No token available');
+      return;
+    }
     fetch(uri, {
-      method: 'PUT',
       headers: {
         'Accept': 'application/json',
+        'Authorization': `Bearer ${token}`,
         'Content-Type': 'application/json'
       },
+      method: 'PUT',
       body: JSON.stringify(order)
     })
       .then(() => {
-        updateData();
+        getData();
       })
       .catch(error => console.error('Unable to add item.', error));
 

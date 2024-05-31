@@ -11,6 +11,7 @@ import DropdownSelect from './DropdownSelect.js';
 import Stack from '@mui/material/Stack';
 import DialogActions from '@mui/material/DialogActions';
 import { useSession } from '../contexts/SessionContext.js';
+import { useUserContext } from '../contexts/UserContext.js';
 
 
 const style = {
@@ -28,16 +29,17 @@ const style = {
 const uri = 'https://localhost:7045/api/Orders';
 
 interface CreateOrderButtonProps {
-  updateData: () => void; // Define the type of the data array
+
 }
 
-const CreateOrderButton: React.FC<CreateOrderButtonProps> = ({ updateData }) => {
+const CreateOrderButton: React.FC<CreateOrderButtonProps> = ({  }) => {
   const [open, setOpen] = React.useState(false);
   const [formData, setFormData] = React.useState({
     createdByUsername: '',
     customerName: '',
     orderType: 0,
   });
+  const { getData } = useUserContext();
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
   const { getToken } = useSession();
@@ -80,7 +82,7 @@ const CreateOrderButton: React.FC<CreateOrderButtonProps> = ({ updateData }) => 
       .then(response => response.json())
       .then(data => {
         console.log(data);
-        updateData();
+        getData();
       })
       .catch(error => console.error('Unable to add item.', error));
 

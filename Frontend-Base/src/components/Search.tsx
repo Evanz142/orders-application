@@ -4,12 +4,14 @@ import InputBase from '@mui/material/InputBase';
 import IconButton from '@mui/material/IconButton';
 import SearchIcon from '@mui/icons-material/Search';
 import { ChangeEvent } from 'react';
+import { useUserContext } from '../contexts/UserContext';
 
 interface SearchProps {
-  setFilterSearchString: (searchString: string) => void,
 }
 
-const Search: React.FC<SearchProps> = ({ setFilterSearchString }) => {
+const Search: React.FC<SearchProps> = ({  }) => {
+  const {setFilterSearchString} = useUserContext();
+
   const handleInputChange = (event: ChangeEvent<HTMLInputElement>) => {
     const searchString = event.target.value;
     setFilterSearchString(searchString);

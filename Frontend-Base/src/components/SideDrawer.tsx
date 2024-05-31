@@ -23,6 +23,7 @@ const itemsMap: { [key: string]: { icon: React.ReactElement, href: string } } = 
 
 const SideDrawer: React.FC<SideDrawerProps> = ({ toggleDrawer }) => {
     const navigate = useNavigate();
+    const { getToken } = useSession();
 
     const handleNavigation = (href: string) => {
         navigate(`/${href}`);
@@ -43,7 +44,7 @@ const SideDrawer: React.FC<SideDrawerProps> = ({ toggleDrawer }) => {
     const generateWeightedDate = () => {
         const now = Date.now();
         const sixMonthsAgo = now - 182 * 24 * 60 * 60 * 1000; // Approx. 6 months in milliseconds
-        console.log("Six months ago: "+sixMonthsAgo);
+        //console.log("Six months ago: "+sixMonthsAgo);
         const randomWeight = 1 - Math.exp(-Math.random()); // Exponential distribution favoring recent dates
         const date = new Date(sixMonthsAgo + Math.random() * (now - sixMonthsAgo));
         return date.toJSON();
@@ -61,7 +62,6 @@ const SideDrawer: React.FC<SideDrawerProps> = ({ toggleDrawer }) => {
     };
 
     const testFunction = () => {
-        const { getToken } = useSession();
         const token = getToken();
         if (!token) {
           console.error('No token available');

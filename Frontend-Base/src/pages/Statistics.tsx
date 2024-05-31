@@ -42,7 +42,7 @@ function StatisticsPage() {
     // }, [])
 
     useEffect(() => { // Animating the statistic numbers on page load
-        //console.log("Animation")
+        console.log("Animation")
 
         const revenueMonth = 8120432;
         const customerRetention = 98;
@@ -62,14 +62,15 @@ function StatisticsPage() {
         setTimeout(() => {
             try 
             {
-                num1Element.style.setProperty('--num1', orderNumberTotal.toString());
-                num2Element.style.setProperty('--num2', orderNumberMonth.toString());
-                num3Element.style.setProperty('--num3', revenueMonth.toString());
-                num4Element.style.setProperty('--num4', customerNumber.toString());
-                num5Element.style.setProperty('--num5', customerRetention.toString());
+                num1Element.style.setProperty('--num1', orderNumberTotal?.toString());
+                num2Element.style.setProperty('--num2', orderNumberMonth?.toString());
+                num3Element.style.setProperty('--num3', revenueMonth?.toString());
+                num4Element.style.setProperty('--num4', customerNumber?.toString());
+                num5Element.style.setProperty('--num5', customerRetention?.toString());
             }
             catch (TypeError) {
                 // Error with initial loading. Can't toString() on undefined.
+                console.log("Error on initial loading.")
             }
         }, 50);
         

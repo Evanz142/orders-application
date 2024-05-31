@@ -11,12 +11,13 @@ interface SessionContextType {
   loading: boolean;
   logout: () => void;
   getToken: () => string | null;
+  isLoggedIn: boolean;
 }
 
 const SessionContext = createContext<SessionContextType | undefined>(undefined);
 
 // Create a provider component
-export const SessionProvider = ({ children }: { children: ReactNode }) => {
+export const SessionProvider = ({ children }: React.PropsWithChildren<{}>) => {
   const [session, setSession] = useState<Session | null>(null);
   const [loading, setLoading] = useState(true);
 
@@ -49,8 +50,10 @@ export const SessionProvider = ({ children }: { children: ReactNode }) => {
     return session?.access_token || null;
   };
 
+  const isLoggedIn = (session?.expires_at ?? -1) > Date.now();
+
   return (
-    <SessionContext.Provider value={{ session, loading, logout, getToken }}>
+    <SessionContext.Provider value={{ session, loading, logout, getToken, isLoggedIn }}>
       {children}
     </SessionContext.Provider>
   );

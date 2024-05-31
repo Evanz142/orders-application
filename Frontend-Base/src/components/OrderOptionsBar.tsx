@@ -6,21 +6,21 @@ import CreateOrderButton from './CreateOrderButton.js';
 import Search from './Search.js';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { useSession } from '../contexts/SessionContext.js';
+import { useUserContext } from '../contexts/UserContext.js';
+
 
 const uri = 'https://localhost:7045/api/Orders';
 
 interface OrderOptionsBarProps {
-  setFilterSearchString: (type: string) => void;
-  setFilterType: (type: number) => void;
-  updateData: () => void; // Define the type of the getData function
   apiRef: any; // apiRef for the data table
 }
 
-const OrderOptionsBar: React.FC<OrderOptionsBarProps> = ({ setFilterSearchString, setFilterType, updateData, apiRef }) => {
+const OrderOptionsBar: React.FC<OrderOptionsBarProps> = ({ apiRef }) => {
   const [orderTypeFilter, setOrderTypeFilter] = React.useState({
     orderType: '',
   });
   const {getToken} = useSession();
+  const {setFilterType, getData} = useUserContext();
 
   const handleOrderTypeFilterChange = (event: { target: { name: any; value: any; }; }) => {
     const { name, value } = event.target;
@@ -46,7 +46,7 @@ const OrderOptionsBar: React.FC<OrderOptionsBarProps> = ({ setFilterSearchString
       method: "DELETE",
     })
     .then(() => {
-      updateData();
+      getData();
     })
     .catch(error => console.error('Unable to delete item.', error));
   }
@@ -66,8 +66,8 @@ const OrderOptionsBar: React.FC<OrderOptionsBarProps> = ({ setFilterSearchString
         >
             <div></div>
             {/* <div id="filter-panel"></div> */}
-            <Search setFilterSearchString={setFilterSearchString}></Search>
-            <CreateOrderButton updateData={updateData}></CreateOrderButton>
+            <Search></Search>
+            <CreateOrderButton></CreateOrderButton>
             <Button onClick={deleteHandler} variant="contained"><DeleteIcon style={{paddingRight: 10}}></DeleteIcon> Delete Selected</Button>
             <DropdownSelect
             id='orderTypeDropdown'

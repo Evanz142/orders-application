@@ -1,7 +1,7 @@
 import React from 'react';
 import { DataGrid } from '@mui/x-data-grid';
 import EditOrderButton from './EditOrderButton.tsx';
-
+import { useUserContext } from '../contexts/UserContext.tsx';
 type StringToNumber = {
   [key: string]: number;
 };
@@ -15,12 +15,10 @@ const orderTypeMap: StringToNumber = {
 };
 
 interface DataTableProps {
-  data: any[]; // Define the type of the data array
   apiRef: any;
-  updateData: () => void;
 }
 
-const columns = (updateData: () => void) => [
+const columns = () => [
   { field: 'id', headerName: 'Order ID', width: 300 },
   { field: 'createdDateString', headerName: 'Creation Date', width: 200 },
   { field: 'createdByUsername', headerName: 'Created By', width: 200 },
@@ -38,7 +36,6 @@ const columns = (updateData: () => void) => [
       return (
         <EditOrderButton 
           aria-label="edit" 
-          updateData={updateData} 
           id={params.row.id} 
           createdByUsername={params.row.createdByUsername} 
           customerName={params.row.customerName}
@@ -52,14 +49,16 @@ const columns = (updateData: () => void) => [
   { field: 'createdDate'}
 ];
 
-const DataTable: React.FC<DataTableProps> = ({ data, apiRef, updateData }) => {
+const DataTable: React.FC<DataTableProps> = ({ apiRef }) => {
+
+  const { tableData } = useUserContext();
 
   return (
     <div style={{ minHeight: '100%', width: '98%', margin: '0 auto', textAlign: 'center' }}>
       <DataGrid
-        autoHeight {...data}
-        rows={data}
-        columns={columns(updateData)}
+        autoHeight {...tableData}
+        rows={tableData}
+        columns={columns()}
         apiRef={apiRef}
         disableColumnFilter
         disableColumnSelector
