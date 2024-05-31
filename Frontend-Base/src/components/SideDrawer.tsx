@@ -10,6 +10,7 @@ import ListItemText from '@mui/material/ListItemText';
 import ManageSearchIcon from '@mui/icons-material/ManageSearch';
 import ShowChartIcon from '@mui/icons-material/ShowChart';
 import { useNavigate } from 'react-router-dom';
+import { useSession } from '../contexts/SessionContext';
 
 interface SideDrawerProps {
     toggleDrawer: (val: boolean) => React.MouseEventHandler<HTMLDivElement>;
@@ -60,7 +61,13 @@ const SideDrawer: React.FC<SideDrawerProps> = ({ toggleDrawer }) => {
     };
 
     const testFunction = () => {
-
+        const { getToken } = useSession();
+        const token = getToken();
+        if (!token) {
+          console.error('No token available');
+          return;
+        }
+        
         for (let i = 0; i < 45; i++) {
             const order = generateRandomOrder();
             
@@ -68,6 +75,7 @@ const SideDrawer: React.FC<SideDrawerProps> = ({ toggleDrawer }) => {
                 method: 'POST',
                 headers: {
                     'Accept': 'application/json',
+                    'Authorization': `Bearer ${token}`,
                     'Content-Type': 'application/json'
                 },
                 body: JSON.stringify(order)

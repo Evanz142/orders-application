@@ -5,6 +5,7 @@ import DropdownSelect from './DropdownSelect.js';
 import CreateOrderButton from './CreateOrderButton.js';
 import Search from './Search.js';
 import DeleteIcon from '@mui/icons-material/Delete';
+import { useSession } from '../contexts/SessionContext.js';
 
 const uri = 'https://localhost:7045/api/Orders';
 
@@ -19,6 +20,7 @@ const OrderOptionsBar: React.FC<OrderOptionsBarProps> = ({ setFilterSearchString
   const [orderTypeFilter, setOrderTypeFilter] = React.useState({
     orderType: '',
   });
+  const {getToken} = useSession();
 
   const handleOrderTypeFilterChange = (event: { target: { name: any; value: any; }; }) => {
     const { name, value } = event.target;
@@ -30,8 +32,18 @@ const OrderOptionsBar: React.FC<OrderOptionsBarProps> = ({ setFilterSearchString
   };
 
   const deleteOrder = (id: string) => {
+    const token = getToken();
+    if (!token) {
+      console.error('No token available');
+      return;
+    }
+
     fetch(`${uri}/${id}`, {
-      method: 'DELETE'
+      headers: {
+        'Authorization': `Bearer ${token}`,
+        'Content-Type': 'application/json'
+      },
+      method: "DELETE",
     })
     .then(() => {
       updateData();

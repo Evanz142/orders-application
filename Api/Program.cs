@@ -1,7 +1,9 @@
-// Program.cs
 using Microsoft.EntityFrameworkCore;
 using Api.Models;
 using Api.Repositories;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -22,6 +24,26 @@ builder.Services.AddCors(options =>
     });
 });
 
+// Configure JWT authentication
+// Bind JWT settings from configuration
+var jwtSettings = new JwtSettings();
+builder.Configuration.Bind("Jwt", jwtSettings);
+var supabaseSignatureKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtSettings.Key));
+var validIssuer = "https://hfhrezvxbnkvvkujmswp.supabase.co/auth/v1";
+var validAudiences = new List<string>() { "authenticated" };
+builder.Services.AddAuthentication().AddJwtBearer(o =>
+{   
+    o.TokenValidationParameters = new TokenValidationParameters
+    {
+        ValidateIssuerSigningKey = true,
+        IssuerSigningKey = supabaseSignatureKey,
+        ValidAudiences = validAudiences,
+        ValidIssuer = validIssuer
+    };
+});
+
+
+
 var app = builder.Build();
 if (app.Environment.IsDevelopment())
 {
@@ -35,9 +57,10 @@ app.UseStaticFiles();
 
 app.UseHttpsRedirection();
 
-app.UseAuthorization();
-
 app.UseCors();
+
+app.UseAuthentication(); // Add this line to enable authentication middleware
+app.UseAuthorization();
 
 app.MapControllers();
 

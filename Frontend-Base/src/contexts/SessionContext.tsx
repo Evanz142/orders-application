@@ -8,7 +8,9 @@ const supabase = createClient('https://hfhrezvxbnkvvkujmswp.supabase.co', 'eyJhb
 // Create a context to hold the session and authentication methods
 interface SessionContextType {
   session: Session | null;
+  loading: boolean;
   logout: () => void;
+  getToken: () => string | null;
 }
 
 const SessionContext = createContext<SessionContextType | undefined>(undefined);
@@ -16,17 +18,21 @@ const SessionContext = createContext<SessionContextType | undefined>(undefined);
 // Create a provider component
 export const SessionProvider = ({ children }: { children: ReactNode }) => {
   const [session, setSession] = useState<Session | null>(null);
+  const [loading, setLoading] = useState(true);
+
   const navigate = useNavigate();
 
   useEffect(() => {
     supabase.auth.getSession().then(({ data: { session } }) => {
-      setSession(session)
+      setSession(session);
+      setLoading(false);
     })
 
     const {
       data: { subscription },
     } = supabase.auth.onAuthStateChange((_event, session) => {
-      setSession(session)
+      setSession(session);
+      setLoading(false);
     })
 
     return () => subscription.unsubscribe()
@@ -39,8 +45,12 @@ export const SessionProvider = ({ children }: { children: ReactNode }) => {
     setSession(null);
   };
 
+  const getToken = (): string | null => {
+    return session?.access_token || null;
+  };
+
   return (
-    <SessionContext.Provider value={{ session, logout }}>
+    <SessionContext.Provider value={{ session, loading, logout, getToken }}>
       {children}
     </SessionContext.Provider>
   );

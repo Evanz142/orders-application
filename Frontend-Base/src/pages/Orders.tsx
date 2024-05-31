@@ -8,6 +8,7 @@ import MenuAppBar from '../components/MenuAppBar.js';
 import OrderOptionsBar from '../components/OrderOptionsBar.js';
 import DataTable from '../components/DataTable.js';
 import { useGridApiRef } from '@mui/x-data-grid';
+import { useSession } from '../contexts/SessionContext.js';
 
 const uri = 'https://localhost:7045/api/Orders';
 const filterUri = 'https://localhost:7045/api/Orders/Search';
@@ -17,6 +18,7 @@ function OrdersPage() {
   const [filterType, setFilterType] = useState<number>(0);
   const [filterSearchString, setFilterSearchString] = useState<string>("");
   const apiRef = useGridApiRef();
+  const { getToken } = useSession();
 
   interface Order {
     id: string;
@@ -80,12 +82,20 @@ function OrdersPage() {
   };
 
   const getData = () => {
-    //setFilterType(type);
-    //setFilterSearchString(searchString);
+    const token = getToken();
+    if (!token) {
+      console.error('No token available');
+      return;
+    }
     
     console.log("getting data now!!");
     if (!filterType && !filterSearchString) { // fetch for when there is no specified filter
-      fetch(uri)
+      fetch(uri, {
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json'
+        }
+      })
       .then(response => response.json())
       .then(data => {
         // update the date strings
@@ -96,7 +106,12 @@ function OrdersPage() {
       .catch(error => console.error('Unable to get items.', error));  
     }
     else { // fetch for when there is a filter
-      fetch(`${filterUri}?searchString=${filterSearchString}&orderType=${filterType}`)
+      fetch(`${filterUri}?searchString=${filterSearchString}&orderType=${filterType}`, {
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json'
+        }
+      })
       .then(response => response.json())
       .then(data => {
         // update the date strings

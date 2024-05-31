@@ -2,6 +2,7 @@ import * as React from 'react';
 import { LineChart } from '@mui/x-charts/LineChart';
 import { useEffect, useState } from 'react';
 import { PlayLesson } from '@mui/icons-material';
+import { useSession } from '../../contexts/SessionContext';
 
 const palette = ['#1976D2', '#834BC4', '#94BADF', '#A389C1', '#C6D8E4', '#79BCFE'];
 
@@ -23,11 +24,21 @@ interface BasicLineChartProps {
 }
 const BasicLineChart: React.FC<BasicLineChartProps> = ({ updateOrderNumberTotal, updateOrderNumberMonth }) => {
 
-
+  const { getToken } = useSession();
   const [data, setData] = useState<[]>([]);
 
   useEffect(() => {
-    fetch(uri)
+    const token = getToken();
+    if (!token) {
+      console.error('No token available');
+      return;
+    }
+    fetch(uri, {
+      headers: {
+        'Authorization': `Bearer ${token}`,
+        'Content-Type': 'application/json'
+      }
+    })
       .then(response => response.json())
       .then(data => {
         setData(data);

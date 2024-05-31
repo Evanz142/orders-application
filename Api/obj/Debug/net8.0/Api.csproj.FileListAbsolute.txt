@@ -1013,3 +1013,4 @@ C:\Users\ezimmerman\Documents\orders-application\Api\obj\Debug\net8.0\ref\Api.dl
 C:\Users\ezimmerman\Documents\orders-application\Api\obj\Debug\net8.0\Api.sourcelink.json
 C:\Users\ezimmerman\Documents\orders-application\Api\bin\Debug\net8.0\Npgsql.dll
 C:\Users\ezimmerman\Documents\orders-application\Api\bin\Debug\net8.0\Npgsql.EntityFrameworkCore.PostgreSQL.dll
+C:\Users\ezimmerman\Documents\orders-application\Api\bin\Debug\net8.0\Microsoft.AspNetCore.Authentication.JwtBearer.dll

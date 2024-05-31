@@ -10,6 +10,7 @@ import AddIcon from '@mui/icons-material/Add';
 import DropdownSelect from './DropdownSelect.js';
 import Stack from '@mui/material/Stack';
 import DialogActions from '@mui/material/DialogActions';
+import { useSession } from '../contexts/SessionContext.js';
 
 
 const style = {
@@ -39,6 +40,7 @@ const CreateOrderButton: React.FC<CreateOrderButtonProps> = ({ updateData }) => 
   });
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
+  const { getToken } = useSession();
   const generateID = () => {
     const chars = "AaBbCcDdEeFf1234567890";
     return [8,4,4,4,12].map(n => Array.from({ length: n }, () => chars[Math.floor(Math.random() * chars.length)]).join("")).join("-");
@@ -60,12 +62,17 @@ const CreateOrderButton: React.FC<CreateOrderButtonProps> = ({ updateData }) => 
         
         ...formData
     }
-    console.log(order);
-
+    console.log("Submitted Order:\t" + order);
+    const token = getToken();
+    if (!token) {
+      console.error('No token available');
+      return;
+    }
     fetch(uri, {
       method: 'POST',
       headers: {
         'Accept': 'application/json',
+        'Authorization': `Bearer ${token}`,
         'Content-Type': 'application/json'
       },
       body: JSON.stringify(order)

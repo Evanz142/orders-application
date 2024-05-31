@@ -4,6 +4,7 @@ import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
 import { PieChart } from '@mui/x-charts/PieChart';
 import { useEffect, useState } from 'react';
+import { useSession } from '../../contexts/SessionContext';
 
 const palette = ['#1976D2', '#79BCFE', '#7878CC', '#E5D9F2', '#C6D8E4'];
 const uri = 'https://localhost:7045/api/Orders/PieData';
@@ -12,9 +13,7 @@ const pieParams = {
     height: 200,
     margin: { right: 5 },
     colors: palette,
-    
 };
-
 
 interface BasicPieChartProps {
   updateCustomers: (number) => void;
@@ -22,16 +21,29 @@ interface BasicPieChartProps {
 
 const BasicPieChart: React.FC<BasicPieChartProps> = ({ updateCustomers }) => {
 
+  const { getToken } = useSession();
   const [data, setData] = useState<[]>([]);
 
   useEffect(() => {
-    fetch(uri)
+    const token = getToken();
+    if (!token) {
+      console.error('No token available');
+      return;
+    }
+
+    fetch(uri, {
+      headers: {
+        'Authorization': `Bearer ${token}`,
+        'Content-Type': 'application/json'
+      }
+    })
       .then(response => response.json())
       .then(data => {
         setData(data);
         updateCustomers(Object.keys(data).length)
       })
       .catch(error => console.error('Unable to get items.', error));
+
   }, []);
   
   return (

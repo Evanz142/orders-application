@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.Linq;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Api.Controllers
 {
@@ -22,12 +23,14 @@ namespace Api.Controllers
         }
 
         [HttpGet]
+        [Authorize]
         public async Task<ActionResult<IEnumerable<Order>>> GetOrders()
         {
             return Ok(await _repository.GetAllOrders());
         }
 
         [HttpGet("BarData")]
+        [Authorize]
         public async Task<ActionResult<IEnumerable<BarChartDataDto>>> GetBarData()
         {
             var barData = await _repository.GetBarData();
@@ -35,6 +38,7 @@ namespace Api.Controllers
         }
 
         [HttpGet("ChartData")]
+        [Authorize]
         public async Task<ActionResult<IEnumerable<LineChartDataDto>>> GetChartData()
         {
             var chartData = await _repository.GetChartData();
@@ -42,6 +46,7 @@ namespace Api.Controllers
         }
 
         [HttpGet("PieData")]
+        [Authorize]
         public async Task<ActionResult<IEnumerable<PieChartDataDto>>> GetPieData()
         {
             var pieData = await _repository.GetPieData();
@@ -49,6 +54,7 @@ namespace Api.Controllers
         }
 
         [HttpGet("{id}")]
+        [Authorize]
         public async Task<ActionResult<Order>> GetOrder(string id)
         {
             var order = await _repository.GetOrderById(id);
@@ -60,6 +66,7 @@ namespace Api.Controllers
         }
 
         [HttpPut]
+        [Authorize]
         public async Task<IActionResult> PutOrder(Order order)
         {
             try
@@ -82,6 +89,7 @@ namespace Api.Controllers
         }
 
         [HttpPost]
+        [Authorize]
         public async Task<ActionResult<Order>> PostOrder(Order order)
         {
             await _repository.AddOrder(order);
@@ -89,6 +97,7 @@ namespace Api.Controllers
         }
 
         [HttpDelete("{id}")]
+        [Authorize]
         public async Task<IActionResult> DeleteOrder(string id)
         {
             var order = await _repository.GetOrderById(id);
@@ -102,18 +111,21 @@ namespace Api.Controllers
         }
 
         [HttpGet("ByType/{type}")]
+        [Authorize]
         public async Task<ActionResult<IEnumerable<Order>>> GetOrdersByType(OrderTypes type)
         {
             return Ok(await _repository.GetOrdersByType(type));
         }
 
         [HttpGet("ByString/{string}")]
+        [Authorize]
         public async Task<ActionResult<IEnumerable<Order>>> GetOrdersByString(string searchString)
         {
             return Ok(await _repository.GetOrdersByString(searchString));
         }
 
         [HttpGet("Search")]
+        [Authorize]
         public async Task<ActionResult<IEnumerable<Order>>> SearchOrders(string searchString = "", OrderTypes? orderType = null)
         {
             return Ok(await _repository.SearchOrders(searchString, orderType));
