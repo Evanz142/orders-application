@@ -2,6 +2,8 @@ import React from 'react';
 import { DataGrid } from '@mui/x-data-grid';
 import EditOrderButton from './EditOrderButton.tsx';
 import { useUserContext } from '../contexts/UserContext.tsx';
+import './DataTable.css';
+
 type StringToNumber = {
   [key: string]: number;
 };
@@ -73,6 +75,7 @@ const DataTable: React.FC<DataTableProps> = ({ apiRef }) => {
         }}
         pageSizeOptions={[6, 12, 24]}
         checkboxSelection
+        getRowClassName={(params) => 'data-grid-row'}
       />
     </div>
   );

@@ -175,10 +175,10 @@
   dependencies:
     "@babel/helper-plugin-utils" "^7.24.0"
 
-"@babel/runtime@^7.12.5", "@babel/runtime@^7.18.3", "@babel/runtime@^7.23.9", "@babel/runtime@^7.24.5", "@babel/runtime@^7.5.5", "@babel/runtime@^7.8.7":
-  version "7.24.5"
-  resolved "https://registry.npmjs.org/@babel/runtime/-/runtime-7.24.5.tgz"
-  integrity sha512-Nms86NXrsaeU9vbBJKni6gXiEXZ4CVpYVzEjDH9Sb8vmZ3UljyA1GSOJl/6LGPO8EHLuSF9H+IxNXHPX8QHJ4g==
+"@babel/runtime@^7.12.5", "@babel/runtime@^7.18.3", "@babel/runtime@^7.23.9", "@babel/runtime@^7.24.5", "@babel/runtime@^7.24.6", "@babel/runtime@^7.5.5", "@babel/runtime@^7.8.7":
+  version "7.24.6"
+  resolved "https://registry.npmjs.org/@babel/runtime/-/runtime-7.24.6.tgz"
+  integrity sha512-Ja18XcETdEl5mzzACGd+DKgaGJzPTCow7EglgwTmHdwokzDFYh/MHua6lU6DV/hjF2IaOJ4oX2nqnjG7RElKOw==
   dependencies:
     regenerator-runtime "^0.14.0"
 
@@ -564,6 +564,43 @@
     clsx "^2.1.1"
     prop-types "^15.8.1"
     reselect "^4.1.8"
+
+"@mui/x-date-pickers-pro@^7.6.1":
+  version "7.6.1"
+  resolved "https://registry.npmjs.org/@mui/x-date-pickers-pro/-/x-date-pickers-pro-7.6.1.tgz"
+  integrity sha512-CshbN4ksOWCB7dIr6BvaVso2eih0g4Zz7BgfwVbSA/M3gawM3z9ChPRSQRrQRc/GxfULCbjEL8mFJPo82vfqjQ==
+  dependencies:
+    "@babel/runtime" "^7.24.6"
+    "@mui/base" "^5.0.0-beta.40"
+    "@mui/system" "^5.15.15"
+    "@mui/utils" "^5.15.14"
+    "@mui/x-date-pickers" "7.6.1"
+    "@mui/x-license" "7.6.1"
+    clsx "^2.1.1"
+    prop-types "^15.8.1"
+    react-transition-group "^4.4.5"
+
+"@mui/x-date-pickers@^7.6.1", "@mui/x-date-pickers@7.6.1":
+  version "7.6.1"
+  resolved "https://registry.npmjs.org/@mui/x-date-pickers/-/x-date-pickers-7.6.1.tgz"
+  integrity sha512-erSq5cnOUyBgBmpHnMxIit5yhT3bl/lOaNZKpObvJtvEJetvNA9xWQ7dz/J/AufLzDuvThjusuRD0y+GmeXtiw==
+  dependencies:
+    "@babel/runtime" "^7.24.6"
+    "@mui/base" "^5.0.0-beta.40"
+    "@mui/system" "^5.15.15"
+    "@mui/utils" "^5.15.14"
+    "@types/react-transition-group" "^4.4.10"
+    clsx "^2.1.1"
+    prop-types "^15.8.1"
+    react-transition-group "^4.4.5"
+
+"@mui/x-license@7.6.1":
+  version "7.6.1"
+  resolved "https://registry.npmjs.org/@mui/x-license/-/x-license-7.6.1.tgz"
+  integrity sha512-tTCrsk6mFCzD+1nLiU9gh/tk4PGABLfV188bi/K2cMBUdXOBv9kUsCqqU/3sL6qVmjFwY/WP0RGwOAGizQNjLQ==
+  dependencies:
+    "@babel/runtime" "^7.24.6"
+    "@mui/utils" "^5.15.14"
 
 "@nodelib/fs.scandir@2.1.5":
   version "2.1.5"
@@ -1168,6 +1205,11 @@ d3-shape@^3.2.0:
   dependencies:
     d3-array "2 - 3"
 
+dayjs@^1.10.7, dayjs@^1.11.11:
+  version "1.11.11"
+  resolved "https://registry.npmjs.org/dayjs/-/dayjs-1.11.11.tgz"
+  integrity sha512-okzr3f11N6WuqYtZSvm+F776mB41wRZMhKP+hc34YdW+KmtYYK9iqvHSwo2k9FEH3fhGXvOPV6yz2IcSrfRUDg==
+
 debug@^4.1.0, debug@^4.3.1, debug@^4.3.2, debug@^4.3.4:
   version "4.3.4"
   resolved "https://registry.npmjs.org/debug/-/debug-4.3.4.tgz"
@@ -1686,6 +1728,11 @@ lodash.merge@^4.6.2:
   version "4.6.2"
   resolved "https://registry.npmjs.org/lodash.merge/-/lodash.merge-4.6.2.tgz"
   integrity sha512-0KpjqXRVvrYyCsX1swR/XTK0va6VQkQM6MNo7PqW77ByjAhoARA8EfrP1N4+KlKj8YS0ZUCtRT/YUuhyYDujIQ==
+
+lodash@^4.17.21:
+  version "4.17.21"
+  resolved "https://registry.npmjs.org/lodash/-/lodash-4.17.21.tgz"
+  integrity sha512-v2kDEe57lecTulaDIuNTPy3Ry4gLGJ6Z1O3vE1krgXZNrsQ+LFTGHVxVjcXPs17LhbZVGedAJv8XZ1tvj5FvSg==
 
 loose-envify@^1.1.0, loose-envify@^1.4.0:
   version "1.4.0"

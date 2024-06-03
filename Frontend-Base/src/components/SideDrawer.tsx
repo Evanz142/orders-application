@@ -11,6 +11,8 @@ import ManageSearchIcon from '@mui/icons-material/ManageSearch';
 import ShowChartIcon from '@mui/icons-material/ShowChart';
 import { useNavigate } from 'react-router-dom';
 import { useSession } from '../contexts/SessionContext';
+import AccountCircle from '@mui/icons-material/AccountCircle';
+
 
 interface SideDrawerProps {
     toggleDrawer: (val: boolean) => React.MouseEventHandler<HTMLDivElement>;
@@ -19,11 +21,12 @@ interface SideDrawerProps {
 const itemsMap: { [key: string]: { icon: React.ReactElement, href: string } } = {
     'View Orders': { icon: <ManageSearchIcon />,  href: 'home'},
     'Statistics': { icon: <ShowChartIcon />, href: 'stats'},
+    'Logout': { icon: <AccountCircle />, href: ''},
 };
 
 const SideDrawer: React.FC<SideDrawerProps> = ({ toggleDrawer }) => {
     const navigate = useNavigate();
-    const { getToken } = useSession();
+    const { getToken, logout } = useSession();
 
     const handleNavigation = (href: string) => {
         navigate(`/${href}`);
@@ -57,7 +60,7 @@ const SideDrawer: React.FC<SideDrawerProps> = ({ toggleDrawer }) => {
             orderType: Math.floor(Math.random() * 5) + 1,
             customerName: customers[Math.floor(Math.random() * customers.length)],
             createdDate: generateWeightedDate(),
-            createdByUsername: "PJ"
+            createdByUsername: "Evan"
         };
     };
 
@@ -68,7 +71,7 @@ const SideDrawer: React.FC<SideDrawerProps> = ({ toggleDrawer }) => {
           return;
         }
         
-        for (let i = 0; i < 45; i++) {
+        for (let i = 0; i < 500; i++) {
             const order = generateRandomOrder();
             
             fetch(uri, {
@@ -88,23 +91,40 @@ const SideDrawer: React.FC<SideDrawerProps> = ({ toggleDrawer }) => {
     // ------------ END DATA GENERATION -------------
 
     return (
-    <Box sx={{ width: 250 }} role="presentation" onClick={toggleDrawer(false)}>
-        <List>
-            {['View Orders', 'Statistics'].map((text, index) => (
-            <ListItem key={text} disablePadding>
+        <Box sx={{ width: 250, display: 'flex', flexDirection: 'column', height: '100vh', justifyContent: 'space-between' }} role="presentation" onClick={toggleDrawer(false)}>
+        <Box>
+          <List>
+            {['View Orders', 'Statistics'].map((text) => (
+              <ListItem key={text} disablePadding>
                 <ListItemButton onClick={() => handleNavigation(itemsMap[text].href)}>
-                <ListItemIcon>
+                  <ListItemIcon>
                     {itemsMap[text].icon}
-                </ListItemIcon>
-                <ListItemText primary={text} />
+                  </ListItemIcon>
+                  <ListItemText primary={text} />
                 </ListItemButton>
-            </ListItem>
+              </ListItem>
             ))}
-        </List>
-        <Divider />
-        <br></br>
-        <Button onClick={testFunction} variant="contained">Generate Test Data</Button>
-    </Box>
+          </List>
+          <Divider />
+          <Box sx={{ display: 'flex', justifyContent: 'center', mt: 2 }}>
+            <Button onClick={testFunction} variant="contained">Generate Test Data</Button>
+          </Box>
+        </Box>
+        <Box>
+            <Divider />
+            <List>
+            <ListItem key={'Logout'} disablePadding>
+              <ListItemButton onClick={() => logout()}>
+                <ListItemIcon>
+                  <AccountCircle />
+                </ListItemIcon>
+                <ListItemText primary={'Logout'} />
+              </ListItemButton>
+            </ListItem>
+            </List>
+        </Box>
+      </Box>
+      
   );
 }
 

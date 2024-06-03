@@ -24,9 +24,9 @@ namespace Api.Controllers
 
         [HttpGet]
         [Authorize]
-        public async Task<ActionResult<IEnumerable<Order>>> GetOrders()
+        public async Task<ActionResult<IEnumerable<Order>>> GetOrders(CancellationToken cancellationToken)
         {
-            return Ok(await _repository.GetAllOrders());
+            return Ok(await _repository.GetAllOrders(cancellationToken));
         }
 
         [HttpGet("BarData")]
@@ -126,9 +126,9 @@ namespace Api.Controllers
 
         [HttpGet("Search")]
         [Authorize]
-        public async Task<ActionResult<IEnumerable<Order>>> SearchOrders(string searchString = "", OrderTypes? orderType = null)
+        public async Task<ActionResult<IEnumerable<Order>>> SearchOrders(string? searchString = "", OrderTypes? orderType = null, string? startDate = "", string? endDate = "")
         {
-            return Ok(await _repository.SearchOrders(searchString, orderType));
+            return Ok(await _repository.SearchOrders(searchString, orderType, startDate, endDate));
         }
     }
 }

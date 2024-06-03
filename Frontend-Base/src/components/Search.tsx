@@ -3,8 +3,9 @@ import Paper from '@mui/material/Paper';
 import InputBase from '@mui/material/InputBase';
 import IconButton from '@mui/material/IconButton';
 import SearchIcon from '@mui/icons-material/Search';
-import { ChangeEvent } from 'react';
+import { ChangeEvent, useCallback } from 'react';
 import { useUserContext } from '../contexts/UserContext';
+import { debounce } from 'lodash';
 
 interface SearchProps {
 }
@@ -17,13 +18,18 @@ const Search: React.FC<SearchProps> = ({  }) => {
     setFilterSearchString(searchString);
   };
 
+  const debouncedHandleInputChange = useCallback(debounce((event) => {
+    handleInputChange(event);
+  }, 300), []);
+
   return (
     <Paper
       component="form"
       sx={{ display: 'flex', alignItems: 'center', width: 300 }}
     >
       <InputBase
-        onChange={handleInputChange}
+        onChange={debouncedHandleInputChange}
+        
         sx={{ ml: 1, flex: 1 }}
         placeholder="Search Table"
         inputProps={{ 'aria-label': 'search table' }}

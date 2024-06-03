@@ -17,9 +17,9 @@ namespace Api.Repositories
             _context = context;
         }
 
-        public async Task<IEnumerable<Order>> GetAllOrders()
+        public async Task<IEnumerable<Order>> GetAllOrders(CancellationToken cancellationToken) 
         {
-            return await _context.Orders.ToListAsync();
+            return await _context.Orders.ToListAsync(cancellationToken);
         }
 
         public async Task<IEnumerable<BarChartDataDto>> GetBarData()
@@ -130,7 +130,7 @@ namespace Api.Repositories
                 .ToListAsync();
         }
 
-        public async Task<IEnumerable<Order>> SearchOrders(string searchString, OrderTypes? orderType)
+        public async Task<IEnumerable<Order>> SearchOrders(string? searchString, OrderTypes? orderType, string? startDate, string? endDate)
         {
             IQueryable<Order> query = _context.Orders;
 
@@ -145,6 +145,20 @@ namespace Api.Repositories
             if (orderType != 0 && orderType.HasValue)
             {
                 query = query.Where(o => o.OrderType == orderType);
+            }
+
+            if (!string.IsNullOrWhiteSpace(startDate) && DateTime.TryParse(startDate, out DateTime startDateTime))
+            {
+                startDateTime = DateTime.SpecifyKind(startDateTime.Date.AddTicks(1), DateTimeKind.Utc); // Ensure UTC
+                Console.WriteLine("Start date filter after: "+startDateTime);
+                query = query.Where(o => o.CreatedDate >= startDateTime);
+            }
+
+            if (!string.IsNullOrWhiteSpace(endDate) && DateTime.TryParse(endDate, out DateTime endDateTime))
+            {
+                endDateTime = DateTime.SpecifyKind(endDateTime.Date.AddDays(1).AddTicks(-1), DateTimeKind.Utc); // End of the day in UTC
+                Console.WriteLine("End date filter after: "+endDateTime);
+                query = query.Where(o => o.CreatedDate <= endDateTime);
             }
 
             return await query.ToListAsync();

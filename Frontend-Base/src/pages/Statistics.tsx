@@ -65,7 +65,7 @@ function StatisticsPage() {
         <meta name="viewport" content="initial-scale=1, width=device-width" />
         <MenuAppBar textValue="Statistics"></MenuAppBar>
         {/* <Button onClick={testFunction} variant="contained">Run Test Function</Button> */}
-        <Box style={{ padding: '1%' }}>
+        <Box style={{ padding: '1%' , paddingBottom: 0}}>
             <Grid container spacing={{ xs: 2, md: 2, lg: 2, xl: 2 }} columns={{ xs: 4, sm: 12, md: 12, lg: 15, xl: 15 }}>
                 <Grid item xs={12} sm={4} md={4} lg={3} xl={3} className="gridItem">
                 <Box className="statContainer">
@@ -101,8 +101,8 @@ function StatisticsPage() {
                 </Box>
                 </Grid>
             </Grid>
-            </Box>
-
+        </Box>
+        <br></br>
 
         <Box style={{paddingLeft: '1%', paddingRight: '1%'}} sx={{ flexGrow: 1 }}>
             <Grid container spacing={{ xs: 2, md: 2, lg: 2, xl: 2 }} columns={{ xs: 4, sm: 8, md: 12, lg: 12, xl: 12 }}>

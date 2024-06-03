@@ -8,14 +8,14 @@ namespace Api.Repositories
 {
     public interface IOrderRepository
     {
-        Task<IEnumerable<Order>> GetAllOrders();
+        Task<IEnumerable<Order>> GetAllOrders(CancellationToken cancellationToken);
         Task<IEnumerable<BarChartDataDto>> GetBarData();
         Task<IEnumerable<LineChartDataDto>> GetChartData();
         Task<IEnumerable<PieChartDataDto>> GetPieData();
         Task<Order> GetOrderById(string id);
         Task<IEnumerable<Order>> GetOrdersByType(OrderTypes type);
         Task<IEnumerable<Order>> GetOrdersByString(string searchString);
-        Task<IEnumerable<Order>> SearchOrders(string searchString, OrderTypes? orderType);
+        Task<IEnumerable<Order>> SearchOrders(string? searchString, OrderTypes? orderType, string? startDate, string? endDate);
         Task AddOrder(Order order);
         Task UpdateOrder(Order order);
         Task DeleteOrder(string id);

@@ -53,6 +53,7 @@ interface UserContextType {
   filterType: number,
   setFilterType: (number) => void,
   setFilterSearchString: (string) => void,
+  setFilterDates: (any) => void,
   getData: () => void,
 }
 
@@ -64,12 +65,13 @@ export const UserProvider = ({ children }: React.PropsWithChildren<{}>) => {
     const [tableData, setTableData] = useState<Order[]>([]);
     const [filterType, setFilterType] = useState<number>(0);
     const [filterSearchString, setFilterSearchString] = useState<string>("");
+    const [filterDates, setFilterDates] = useState<string[]>([]);
 
     // update the data whenever the order type filter or search filter string changes
     
     useEffect(() => {
       getData();
-    }, [filterType, filterSearchString]);
+    }, [filterType, filterSearchString, filterDates]);
 
     const getData = () => {
         const token = getToken();
@@ -79,7 +81,7 @@ export const UserProvider = ({ children }: React.PropsWithChildren<{}>) => {
         }
         
         console.log("getting data now in UserContext!!");
-        if (!filterType && !filterSearchString) { // fetch for when there is no specified filter
+        if (!filterType && !filterSearchString && !filterDates) { // fetch for when there is no specified filter
           fetch(uri, {
             headers: {
               'Authorization': `Bearer ${token}`,
@@ -96,7 +98,7 @@ export const UserProvider = ({ children }: React.PropsWithChildren<{}>) => {
           .catch(error => console.error('Unable to get items.', error));  
         }
         else { // fetch for when there is a filter
-          fetch(`${uri}/Search?searchString=${filterSearchString}&orderType=${filterType}`, {
+          fetch(`${uri}/Search?searchString=${filterSearchString}&orderType=${filterType}&startDate=${filterDates[0]}&endDate=${filterDates[1]}`, {
             headers: {
               'Authorization': `Bearer ${token}`,
               'Content-Type': 'application/json'
@@ -114,7 +116,7 @@ export const UserProvider = ({ children }: React.PropsWithChildren<{}>) => {
     }
 
     return (
-        <UserContext.Provider value={{ tableData, filterType, getData, setFilterType, setFilterSearchString}}>
+        <UserContext.Provider value={{ tableData, filterType, getData, setFilterType, setFilterSearchString, setFilterDates}}>
           {children}
         </UserContext.Provider>
       );

@@ -13,7 +13,7 @@ import { IconButton } from '@mui/material';
 import EditIcon from '@mui/icons-material/Edit';
 import { useSession } from '../contexts/SessionContext.js';
 import { useUserContext } from '../contexts/UserContext.js';
-
+import './DataTable.css';
 
 
 const style = {
@@ -95,7 +95,7 @@ const EditOrderButton: React.FC<EditOrderButtonProps> = ({ id, createdByUsername
 
   return (
     <div>
-      <IconButton onClick={handleOpen} aria-label="edit">
+      <IconButton className="edit-button" onClick={handleOpen} aria-label="edit">
         <EditIcon />
       </IconButton>
       <Modal

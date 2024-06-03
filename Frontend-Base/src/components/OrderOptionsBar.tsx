@@ -7,7 +7,7 @@ import Search from './Search.js';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { useSession } from '../contexts/SessionContext.js';
 import { useUserContext } from '../contexts/UserContext.js';
-
+import DateSelect from './DateSelect.js';
 
 const uri = 'https://localhost:7045/api/Orders';
 
@@ -74,6 +74,7 @@ const OrderOptionsBar: React.FC<OrderOptionsBarProps> = ({ apiRef }) => {
             name="orderType"
             value={orderTypeFilter.orderType}
             onChange={handleOrderTypeFilterChange}></DropdownSelect>
+            <DateSelect></DateSelect>
         </Stack>
     </div>
   );

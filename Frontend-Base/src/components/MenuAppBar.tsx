@@ -81,10 +81,9 @@ const MenuAppBar: React.FC<MenuAppBarProps> = ({ textValue }) => {
             open={Boolean(anchorEl)}
             onClose={handleClose}
           >
-            <MenuItem onClick={handleClose}>My Account</MenuItem>
+            {/* <MenuItem onClick={handleClose}>My Account</MenuItem> */}
             <MenuItem onClick={logout}>Logout</MenuItem>
           </Menu>
-    
         </Toolbar>
       </AppBar>
     </Box>

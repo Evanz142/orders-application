@@ -1,0 +1,7 @@
+.data-grid-row:hover .edit-button {
+    visibility: visible;
+}
+
+.edit-button {
+    visibility: hidden;
+}
