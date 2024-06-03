@@ -65,47 +65,59 @@ function StatisticsPage() {
         <meta name="viewport" content="initial-scale=1, width=device-width" />
         <MenuAppBar textValue="Statistics"></MenuAppBar>
         {/* <Button onClick={testFunction} variant="contained">Run Test Function</Button> */}
-        <Stack style={{padding: '1%'}} direction="row" width="98%" textAlign="center" spacing={2}>
-            <Box className="statContainer" flexGrow={1}>
-                <Typography id="num1" variant="h2"></Typography>
-                <Typography variant="h4">total orders</Typography>
-            </Box>
-            <Box className="statContainer" flexGrow={1}>
-                <Typography id="num2" variant="h2"></Typography>
-                <Typography variant="h4">monthly orders</Typography>
-            </Box>
-            <Box className="statContainer" flexGrow={1}>
-                <Typography id="num3" variant="h2"></Typography>
-                <Typography variant="h4">month revenue</Typography>
-            </Box>
-            <Box className="statContainer" flexGrow={1}>
-                <Typography id="num4" variant="h2"></Typography>
-                <Typography variant="h4">customers</Typography>
-            </Box>
-            <Box justifyContent="center" className="statContainer" flexGrow={1}>
-                <div id="num5container">
+        <Box style={{ padding: '1%' }}>
+            <Grid container spacing={{ xs: 2, md: 2, lg: 2, xl: 2 }} columns={{ xs: 4, sm: 12, md: 12, lg: 15, xl: 15 }}>
+                <Grid item xs={12} sm={4} md={4} lg={3} xl={3} className="gridItem">
+                <Box className="statContainer">
+                    <Typography id="num1" variant="h2"></Typography>
+                    <Typography variant="h4">total orders</Typography>
+                </Box>
+                </Grid>
+                <Grid item xs={12} sm={4} md={4} lg={3} xl={3} className="gridItem">
+                <Box className="statContainer">
+                    <Typography id="num2" variant="h2"></Typography>
+                    <Typography variant="h4">monthly orders</Typography>
+                </Box>
+                </Grid>
+                <Grid item xs={12} sm={4} md={4} lg={3} xl={3} className="gridItem">
+                <Box className="statContainer">
+                    <Typography id="num3" variant="h2"></Typography>
+                    <Typography variant="h4">month revenue</Typography>
+                </Box>
+                </Grid>
+                <Grid item xs={12} sm={6} md={6} lg={3} xl={3} className="gridItem">
+                <Box className="statContainer">
+                    <Typography id="num4" variant="h2"></Typography>
+                    <Typography variant="h4">customers</Typography>
+                </Box>
+                </Grid>
+                <Grid item xs={12} sm={6} md={6} lg={3} xl={3} className="gridItem">
+                <Box className="statContainer">
+                    <div id="num5container">
                     <Typography id="num5" variant="h2"></Typography>
                     <Typography id="num6">%</Typography>
-                </div>
-                <Typography variant="h4">retention rate</Typography>
+                    </div>
+                    <Typography variant="h4">retention rate</Typography>
+                </Box>
+                </Grid>
+            </Grid>
             </Box>
-        </Stack>
 
 
         <Box style={{paddingLeft: '1%', paddingRight: '1%'}} sx={{ flexGrow: 1 }}>
-            <Grid container spacing={{ xs: 2, md: 3 }} columns={{ xs: 4, sm: 8, md: 12 }}>
+            <Grid container spacing={{ xs: 2, md: 2, lg: 2, xl: 2 }} columns={{ xs: 4, sm: 8, md: 12, lg: 12, xl: 12 }}>
                 
-                <Grid item xs={2} sm={12} md={3.5} lg={3.5}>
+                <Grid item xs={12} sm={12} md={12} lg={6} xl={3.5}>
                     <Box className="dataContainer" flexGrow={1}>
                         <BasicPieChart updateCustomers={setCustomerNumber} ></BasicPieChart>
                     </Box>
                 </Grid>
-                <Grid item xs={5} sm={12} md={5} lg={5}>
+                <Grid item xs={12} sm={12} md={12} lg={6} xl={5}>
                     <Box className="dataContainer" flexGrow={1}>
                         <BasicLineChart updateOrderNumberTotal={setOrderNumberTotal} updateOrderNumberMonth={setOrderNumberMonth} ></BasicLineChart>
                     </Box>
                 </Grid>
-                <Grid item xs={2} sm={12} md={3.5} lg={3.5}>
+                <Grid item xs={12} sm={12} md={12} lg={12} xl={3.5}>
                     <Box className="dataContainer" flexGrow={1}>
                         <BasicBarChart></BasicBarChart>
                     </Box>

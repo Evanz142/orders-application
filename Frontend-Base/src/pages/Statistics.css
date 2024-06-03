@@ -13,21 +13,29 @@ body {
   justify-content: center;
 }
 
-.dataContainer {
-  background-color: white;
-  padding: 10px;
-  border-radius: 10px;
-  justify-content: center;
-  align-items: center;
+.gridItem {
+  display: flex;
 }
 
 .statContainer {
   background-color: white;
-  width: 20%;
-  padding: 60px;
+  padding: 20px;
+  padding-top: 60px;
+  padding-bottom: 60px;
   border-radius: 15px;
-  font-size: 200%;
+  font-size: 100vw;
   color: #1976D2;
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+
+.dataContainer {
+  background-color: white;
+  padding: 20px;
+  border-radius: 10px;
+  justify-content: center;
+  align-items: center;
 }
 
 /* ANIMATIONS FOR NUMBERS ON STATISTICS PAGE */

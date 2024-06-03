@@ -48,38 +48,42 @@ namespace Api.Repositories
         public async Task<IEnumerable<LineChartDataDto>> GetChartData()
         {
             var orders = await _context.Orders
-                .GroupBy(o => o.CreatedByUsername)
-                .Select(g => new
+                .Select(o => new
                 {
-                    CreatedByUsername = g.Key,
-                    Orders = g.Select(o => new
-                    {
-                        o.CreatedDate.Year,
-                        o.CreatedDate.Month
-                    }).ToList()
+                    o.CreatedByUsername,
+                    o.CreatedDate.Year,
+                    o.CreatedDate.Month
                 })
                 .ToListAsync();
 
-            // Process the data in-memory to calculate cumulative monthly order counts
-            var chartData = orders.Select(g => new LineChartDataDto
-            {
-                Id = g.CreatedByUsername,
-                Label = g.CreatedByUsername,
-                Data = g.Orders
-                    .GroupBy(o => new { o.Year, o.Month })
-                    .OrderBy(gm => gm.Key.Year)
-                    .ThenBy(gm => gm.Key.Month)
-                    .Select((gm, index) => new
-                    {
-                        MonthIndex = index + 1,
-                        Count = gm.Count()
-                    })
-                    .Scan((prev, curr) => new { curr.MonthIndex, Count = curr.Count })
-                    .Select(x => x.Count)
-                    .ToList()
-            }).ToList();
+            var earliestOrderDate = orders.Min(o => new DateTime(o.Year, o.Month, 1));
+            var currentDate = DateTime.Now;
+
+            var months = GetMonthRange(earliestOrderDate, currentDate);
+
+            var chartData = orders
+                .GroupBy(o => o.CreatedByUsername)
+                .Select(g => new LineChartDataDto
+                {
+                    Id = g.Key,
+                    Label = g.Key,
+                    Data = months.Select(m => g.Count(o => o.Year == m.Year && o.Month == m.Month)).ToList()
+                })
+                .ToList();
 
             return chartData;
+        }
+
+        private List<DateTime> GetMonthRange(DateTime start, DateTime end)
+        {
+            var months = new List<DateTime>();
+
+            for (var date = new DateTime(start.Year, start.Month, 1); date <= end; date = date.AddMonths(1))
+            {
+                months.Add(date);
+            }
+
+            return months;
         }
 
         public async Task<IEnumerable<PieChartDataDto>> GetPieData()

@@ -37,7 +37,6 @@ const BasicBarChart = () => {
       colors={palette}
       xAxis={[{ scaleType: 'band', data: ['Order Types'] }]}
       series={data}
-      width={400}
       height={400}
       {...BarParams}
     />

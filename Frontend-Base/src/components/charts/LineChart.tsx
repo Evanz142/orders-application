@@ -1,13 +1,11 @@
 import * as React from 'react';
 import { LineChart } from '@mui/x-charts/LineChart';
 import { useEffect, useState } from 'react';
-import { PlayLesson } from '@mui/icons-material';
 import { useSession } from '../../contexts/SessionContext';
 
 const palette = ['#1976D2', '#834BC4', '#94BADF', '#A389C1', '#C6D8E4', '#79BCFE'];
 
 const years = [
-  new Date(2023, 10, 1),
   new Date(2023, 11, 1),
   new Date(2024, 0, 1),
   new Date(2024, 1, 1),
@@ -67,7 +65,6 @@ const BasicLineChart: React.FC<BasicLineChartProps> = ({ updateOrderNumberTotal,
       ]}
       
       series={data.length > 0 ? data : []}
-      width={700}
       height={400}
     />
   );
