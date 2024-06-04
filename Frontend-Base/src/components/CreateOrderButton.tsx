@@ -3,7 +3,7 @@ import AddIcon from '@mui/icons-material/Add';
 import DropdownSelect from './DropdownSelect.js';
 import { useSession } from '../contexts/SessionContext.js';
 import { useUserContext } from '../contexts/UserContext.js';
-import { Alert, Snackbar, Modal, Backdrop, Box, Fade, Button, TextField, Typography, Stack, DialogActions } from '@mui/material';
+import { Alert, Snackbar, Modal, Backdrop, Box, Fade, Button, TextField, Typography, Stack, DialogActions, Select, MenuItem } from '@mui/material';
 
 
 const style = {
@@ -18,6 +18,26 @@ const style = {
   p: 4,
 };
 
+// format the order type to make it readable and not just a number
+function formatOrderType(orderType: number): string {
+  switch (orderType) {
+      case 0:
+          return 'None';
+      case 1:
+          return 'Standard';
+      case 2:
+          return 'Sale Order';
+      case 3:
+          return 'Purchase Order';
+      case 4:
+          return 'Transfer Order';
+      case 5:
+          return 'Return Order';
+      default:
+          return '';
+  }
+  }
+
 const uri = 'https://localhost:7045/api/Orders';
 
 interface CreateOrderButtonProps {
@@ -31,19 +51,23 @@ const CreateOrderButton: React.FC<CreateOrderButtonProps> = ({  }) => {
     customerName: '',
     orderType: 0,
   });
-  const { getData } = useUserContext();
+  const [currentDraft, setCurrentDraft] = React.useState({
+    createdByUsername: '',
+    customerName: '',
+    orderType: 0,
+  })
+  const { getData, queueSnackbar, addDraft, deleteDraft, orderDrafts } = useUserContext();
   const handleOpen = () => setOpen(true);
-  const handleClose = () => setOpen(false);
-  const { getToken } = useSession();
-  const [snackbarOpen, setSnackbarOpen] = React.useState(false);
-
-  const handleSnackbarClose = (event?: React.SyntheticEvent | Event, reason?: string) => {
-    if (reason === 'clickaway') {
-      return;
-    }
-
-    setSnackbarOpen(false);
+  const handleClose = () => {
+    setOpen(false);
+    setFormData({ // reset the form so its empty if the user creates another order
+      createdByUsername: '',
+      customerName: '',
+      orderType: 0,
+    })
   };
+  const { getToken } = useSession();
+  
   const generateID = () => {
     const chars = "AaBbCcDdEeFf1234567890";
     return [8,4,4,4,12].map(n => Array.from({ length: n }, () => chars[Math.floor(Math.random() * chars.length)]).join("")).join("-");
@@ -57,6 +81,26 @@ const CreateOrderButton: React.FC<CreateOrderButtonProps> = ({  }) => {
       [name]: value
     }));
   };
+
+  const handleDraftSelect = (event: { target: { value: any; }; }) => {
+    const draft = orderDrafts[event.target.value];
+    setCurrentDraft(draft)
+    setFormData(draft);
+  };
+  
+  const handleDraft = () => {
+
+    addDraft(formData);
+    deleteDraft(currentDraft);
+
+    queueSnackbar("Draft Saved!");
+    setFormData({ // reset the form so its empty if the user creates another order
+      createdByUsername: '',
+      customerName: '',
+      orderType: 0,
+    })
+    handleClose();
+  }
 
   const handleSubmit = () => {
     const order = {
@@ -87,7 +131,13 @@ const CreateOrderButton: React.FC<CreateOrderButtonProps> = ({  }) => {
       })
       .catch(error => console.error('Unable to add item.', error));
     
-    setSnackbarOpen(true);
+    queueSnackbar("Order Created!");
+    setFormData({ // reset the form so its empty if the user creates another order
+      createdByUsername: '',
+      customerName: '',
+      orderType: 0,
+    })
+    deleteDraft(currentDraft);
     handleClose();
   }
 
@@ -112,9 +162,27 @@ const CreateOrderButton: React.FC<CreateOrderButtonProps> = ({  }) => {
       >
         <Fade in={open}>
           <Box sx={style}>
-            <Typography id="transition-modal-title" variant="h6" component="h2">
-              Create Order 
-            </Typography>
+            <Stack direction="row" justifyContent="space-between" alignItems="center">
+                <Typography id="transition-modal-title" variant="h6" component="h2">
+                  Create Order
+                </Typography>
+                <Select
+                  labelId="draft-select-label"
+                  id="draft-select"
+                  onChange={handleDraftSelect}
+                  displayEmpty
+                  sx={{ minWidth: 160 }}
+                  defaultValue=""
+                  size="small"
+                >
+                  <MenuItem value="" disabled>Select Draft</MenuItem>
+                  {orderDrafts.map((draft, index) => (
+                    <MenuItem key={index} value={index}>
+                      {draft.createdByUsername}, {draft.customerName}, {formatOrderType(draft.orderType)}
+                    </MenuItem>
+                  ))}
+                </Select>
+              </Stack>
             <br></br>
             <Stack
             direction={{ xs: 'column', sm: 'row' }}
@@ -145,24 +213,15 @@ const CreateOrderButton: React.FC<CreateOrderButtonProps> = ({  }) => {
             </Stack>
             
             <br></br>
+            
             <DialogActions>
+              <Button onClick={handleDraft} style={{ marginRight: 'auto' }}>Save Draft</Button>
               <Button onClick={handleClose}>Cancel</Button>
               <Button onClick={handleSubmit}>Submit</Button>
             </DialogActions>
           </Box>
         </Fade>
       </Modal>
-
-      <Snackbar open={snackbarOpen} autoHideDuration={3200} onClose={handleSnackbarClose}>
-        <Alert
-          onClose={handleSnackbarClose}
-          severity="success"
-          variant="filled"
-          sx={{ width: '100%' }}
-        >
-          Order Created!
-        </Alert>
-      </Snackbar>
     </div>
   );
 }

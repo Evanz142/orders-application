@@ -11,6 +11,7 @@ import Menu from '@mui/material/Menu';
 import Drawer from '@mui/material/Drawer/Drawer';
 import SideDrawer from './SideDrawer.tsx';
 import { useSession } from '../contexts/SessionContext';
+import DarkModeSwitch from './DarkModeSwitch.tsx';
 
 interface MenuAppBarProps {
   textValue: string;
@@ -52,6 +53,9 @@ const MenuAppBar: React.FC<MenuAppBarProps> = ({ textValue }) => {
           <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
             {textValue}
           </Typography>
+          <Box style={{padding: 10}}>
+            <DarkModeSwitch></DarkModeSwitch>
+          </Box>
           <IconButton
             size="large"
             aria-label="account of current user"
@@ -78,6 +82,7 @@ const MenuAppBar: React.FC<MenuAppBarProps> = ({ textValue }) => {
             onClose={handleClose}
           >
             {/* <MenuItem onClick={handleClose}>My Account</MenuItem> */}
+            
             <MenuItem onClick={logout}>Logout</MenuItem>
           </Menu>
         </Toolbar>

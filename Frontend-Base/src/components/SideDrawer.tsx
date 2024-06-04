@@ -113,9 +113,6 @@ const SideDrawer: React.FC<SideDrawerProps> = ({ toggleDrawer }) => {
         </Box>
         
         <Box>
-            <Box style={{padding: 10}}>
-              <DarkModeSwitch></DarkModeSwitch>
-            </Box>
             <Divider />
             <List>
             <ListItem key={'Logout'} disablePadding>

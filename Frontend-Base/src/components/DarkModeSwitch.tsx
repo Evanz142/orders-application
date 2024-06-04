@@ -43,7 +43,7 @@ const DarkModeSwitch = () => {
         <style>
             {`
             .theme-switch {
-                --toggle-size: 12px;
+                --toggle-size: 10px;
                 /* the size is adjusted using font-size,
                    this is not transform scale,
                    so you can choose any size */

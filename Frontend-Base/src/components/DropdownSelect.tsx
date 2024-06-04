@@ -10,7 +10,7 @@ interface DropdownSelectProps {
 
 const DropdownSelect: React.FC<DropdownSelectProps> = ({ id, name, value, onChange }) => {
   return (
-    <FormControl sx={{ m: 1, minWidth: 160 }} size="small">
+    <FormControl sx={{minWidth: 160 }} size="medium">
       <InputLabel id={`${id}-label`}>Order Type</InputLabel>
       <Select
         labelId={`${id}-label`}

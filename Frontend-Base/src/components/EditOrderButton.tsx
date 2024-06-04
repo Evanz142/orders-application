@@ -9,7 +9,7 @@ import Typography from '@mui/material/Typography';
 import DropdownSelect from './DropdownSelect.js';
 import Stack from '@mui/material/Stack';
 import DialogActions from '@mui/material/DialogActions';
-import { IconButton } from '@mui/material';
+import { Alert, IconButton, Snackbar } from '@mui/material';
 import EditIcon from '@mui/icons-material/Edit';
 import { useSession } from '../contexts/SessionContext.js';
 import { useUserContext } from '../contexts/UserContext.js';
@@ -46,7 +46,7 @@ const EditOrderButton: React.FC<EditOrderButtonProps> = ({ id, createdByUsername
     orderType: orderType,
   });
   const { getToken } = useSession();
-  const { getData } = useUserContext();
+  const { getData, queueSnackbar } = useUserContext();
   const handleOpen = (event: React.MouseEvent<HTMLButtonElement>) => {
     event.stopPropagation();
     setOpen(true);
@@ -70,7 +70,6 @@ const EditOrderButton: React.FC<EditOrderButtonProps> = ({ id, createdByUsername
         
         ...formData
     }
-    console.log(order);
     const token = getToken();
     if (!token) {
       console.error('No token available');
@@ -89,7 +88,7 @@ const EditOrderButton: React.FC<EditOrderButtonProps> = ({ id, createdByUsername
         getData();
       })
       .catch(error => console.error('Unable to add item.', error));
-
+    queueSnackbar("Order Edited!");
     handleClose();
   }
 

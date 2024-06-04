@@ -1,6 +1,6 @@
 import React, { ReactNode, useContext, useEffect, useState } from "react"
 import { useSession } from "./SessionContext";
-import { Theme, createTheme } from "@mui/material";
+import { Alert, Snackbar, Theme, createTheme } from "@mui/material";
 
 const uri = 'https://localhost:7045/api/Orders';
 interface Order {
@@ -10,6 +10,13 @@ interface Order {
     createdDate: string;
     createdByUsername: string;
 }
+
+interface OrderDraft {
+  orderType: any;
+  customerName: string;
+  createdByUsername: string;
+}
+
 // format the order type to make it readable and not just a number
 function formatOrderType(orderType: number): string {
 switch (orderType) {
@@ -55,12 +62,16 @@ interface UserContextType {
   darkMode: boolean,
   darkTheme: Theme,
   lightTheme: Theme,
+  orderDrafts: OrderDraft[],
   setDarkMode: (boolean) => void,
   setFilterType: (number) => void,
   setFilterTypes: (any) => void,
   setFilterSearchString: (string) => void,
   setFilterDates: (any) => void,
   getData: () => void,
+  queueSnackbar: (string) => void,
+  addDraft: (OrderDraft) => void,
+  deleteDraft: (OrderDraft) => void,
 }
 
 const UserContext = React.createContext<UserContextType | undefined>(undefined);
@@ -69,12 +80,15 @@ export const UserProvider = ({ children }: React.PropsWithChildren<{}>) => {
     // Set up user context here
     const { getToken } = useSession();
     const [tableData, setTableData] = useState<Order[]>([]);
+    const [orderDrafts, setOrderDrafts] = useState<OrderDraft[]>([]);
     const [filterType, setFilterType] = useState<number>(0);
     const [filterTypes, setFilterTypes] = useState<any[]>([]);
 
     const [filterSearchString, setFilterSearchString] = useState<string>("");
     const [filterDates, setFilterDates] = useState<string[]>([]);
     const [darkMode, setDarkMode] = useState<boolean>();
+    const [snackbarOpen, setSnackbarOpen] = useState(false);
+    const [snackbarMessage, setSnackbarMessage] = useState<string>("");
 
     const darkTheme = createTheme({
       palette: {
@@ -104,8 +118,6 @@ export const UserProvider = ({ children }: React.PropsWithChildren<{}>) => {
         console.log("getting data now in UserContext!!");
 
         const filterTypeString = filterTypes.map(ft => ft.value).join(',');
-        console.log("Filter type string: " +filterTypeString);
-
         if (!filterTypeString && !filterSearchString && !filterDates) { // fetch for when there is no specified filter
           fetch(uri, {
             headers: {
@@ -140,9 +152,59 @@ export const UserProvider = ({ children }: React.PropsWithChildren<{}>) => {
         }
     }
 
+    const handleSnackbarClose = (event?: React.SyntheticEvent | Event, reason?: string) => {
+      if (reason === 'clickaway') {
+        return;
+      }
+  
+      setSnackbarOpen(false);
+    };
+
+    const queueSnackbar = (message: string) => {
+      setSnackbarMessage(message);
+      setSnackbarOpen(true);
+    }
+
+    const addDraft = (draft: OrderDraft) => {
+      setOrderDrafts(prevDrafts => [...prevDrafts, draft]);
+      queueSnackbar("Draft added successfully");
+    }
+  
+    const deleteDraft = (draft: OrderDraft) => {
+      setOrderDrafts(prevDrafts => prevDrafts.filter(d => d !== draft));
+      queueSnackbar("Draft deleted successfully");
+    }
+
     return (
-        <UserContext.Provider value={{ tableData, filterType, darkMode, darkTheme, lightTheme, setDarkMode, getData, setFilterType, setFilterTypes, setFilterSearchString, setFilterDates}}>
+        <UserContext.Provider value={{ 
+          tableData, 
+          filterType, 
+          darkMode, 
+          darkTheme, 
+          lightTheme,
+          orderDrafts,
+          setDarkMode,
+          getData, 
+          setFilterType, 
+          setFilterTypes, 
+          setFilterSearchString,
+          setFilterDates, 
+          queueSnackbar, 
+          addDraft,
+          deleteDraft,
+          }}>
+
           {children}
+          <Snackbar open={snackbarOpen} autoHideDuration={3200} onClose={handleSnackbarClose}>
+            <Alert
+              onClose={handleSnackbarClose}
+              severity="success"
+              variant="filled"
+              sx={{ width: '100%' }}
+            >
+              {snackbarMessage}
+            </Alert>
+          </Snackbar>
         </UserContext.Provider>
       );
 
