@@ -75,8 +75,11 @@ const OrderOptionsBar: React.FC<OrderOptionsBarProps> = ({ apiRef }) => {
             <div></div>
             {/* <div id="filter-panel"></div> */}
             <Search></Search>
+            <Stack direction="row" spacing={4}>
             <CreateOrderButton></CreateOrderButton>
             <Button onClick={deleteHandler} variant="contained"><DeleteIcon style={{paddingRight: 10}}></DeleteIcon> Delete Selected</Button>
+            </Stack>
+            
             {/* <DropdownSelect
             id='orderTypeDropdown'
             name="orderType"
