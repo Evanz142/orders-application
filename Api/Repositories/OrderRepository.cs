@@ -142,7 +142,7 @@ namespace Api.Repositories
                 .ToListAsync(cancellationToken);
         }
 
-        public async Task<IEnumerable<Order>> SearchOrders(CancellationToken cancellationToken, string? searchString, OrderTypes? orderType, string? startDate, string? endDate)
+        public async Task<IEnumerable<Order>> SearchOrders(CancellationToken cancellationToken, string? searchString, string? orderTypes, string? startDate, string? endDate)
         {
             IQueryable<Order> query = _context.Orders;
 
@@ -155,17 +155,20 @@ namespace Api.Repositories
             }
 
             cancellationToken.ThrowIfCancellationRequested();
-
-            if (orderType != 0 && orderType.HasValue)
+            
+            if (!string.IsNullOrWhiteSpace(orderTypes))
             {
-                query = query.Where(o => o.OrderType == orderType);
+                var orderTypeList = orderTypes.Split(',') // parse the comma separated list of order types in the filter
+                                            .Select(int.Parse)
+                                            .ToList();
+                query = query.Where(o => orderTypeList.Contains((int)o.OrderType));
             }
 
             cancellationToken.ThrowIfCancellationRequested();
 
             if (!string.IsNullOrWhiteSpace(startDate) && DateTime.TryParse(startDate, out DateTime startDateTime))
             {
-                startDateTime = DateTime.SpecifyKind(startDateTime.Date.AddTicks(100), DateTimeKind.Utc); // Ensure UTC
+                startDateTime = DateTime.SpecifyKind(startDateTime.Date.AddTicks(100), DateTimeKind.Utc); // Ensure UTC (this is also breaking because it returns dates before the start date)
                 Console.WriteLine("Start date filter after: "+startDateTime);
                 query = query.Where(o => o.CreatedDate >= startDateTime);
             }

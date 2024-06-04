@@ -126,9 +126,9 @@ namespace Api.Controllers
 
         [HttpGet("Search")]
         [Authorize]
-        public async Task<ActionResult<IEnumerable<Order>>> SearchOrders(CancellationToken cancellationToken, string? searchString = "", OrderTypes? orderType = null, string? startDate = "", string? endDate = "")
+        public async Task<ActionResult<IEnumerable<Order>>> SearchOrders(CancellationToken cancellationToken, string? searchString = "", string? orderTypes = "", string? startDate = "", string? endDate = "")
         {
-            return Ok(await _repository.SearchOrders(cancellationToken, searchString, orderType, startDate, endDate));
+            return Ok(await _repository.SearchOrders(cancellationToken, searchString, orderTypes, startDate, endDate));
         }
     }
 }

@@ -57,6 +57,7 @@ interface UserContextType {
   lightTheme: Theme,
   setDarkMode: (boolean) => void,
   setFilterType: (number) => void,
+  setFilterTypes: (any) => void,
   setFilterSearchString: (string) => void,
   setFilterDates: (any) => void,
   getData: () => void,
@@ -69,6 +70,8 @@ export const UserProvider = ({ children }: React.PropsWithChildren<{}>) => {
     const { getToken } = useSession();
     const [tableData, setTableData] = useState<Order[]>([]);
     const [filterType, setFilterType] = useState<number>(0);
+    const [filterTypes, setFilterTypes] = useState<any[]>([]);
+
     const [filterSearchString, setFilterSearchString] = useState<string>("");
     const [filterDates, setFilterDates] = useState<string[]>([]);
     const [darkMode, setDarkMode] = useState<boolean>();
@@ -89,7 +92,7 @@ export const UserProvider = ({ children }: React.PropsWithChildren<{}>) => {
     
     useEffect(() => {
       getData();
-    }, [filterType, filterSearchString, filterDates]);
+    }, [filterTypes, filterSearchString, filterDates]);
 
     const getData = () => {
         const token = getToken();
@@ -99,7 +102,11 @@ export const UserProvider = ({ children }: React.PropsWithChildren<{}>) => {
         }
         
         console.log("getting data now in UserContext!!");
-        if (!filterType && !filterSearchString && !filterDates) { // fetch for when there is no specified filter
+
+        const filterTypeString = filterTypes.map(ft => ft.value).join(',');
+        console.log("Filter type string: " +filterTypeString);
+
+        if (!filterTypeString && !filterSearchString && !filterDates) { // fetch for when there is no specified filter
           fetch(uri, {
             headers: {
               'Authorization': `Bearer ${token}`,
@@ -116,7 +123,7 @@ export const UserProvider = ({ children }: React.PropsWithChildren<{}>) => {
           .catch(error => console.error('Unable to get items.', error));  
         }
         else { // fetch for when there is a filter
-          fetch(`${uri}/Search?searchString=${filterSearchString}&orderType=${filterType}&startDate=${filterDates[0]}&endDate=${filterDates[1]}`, {
+          fetch(`${uri}/Search?searchString=${filterSearchString}&orderTypes=${filterTypeString}&startDate=${filterDates[0]}&endDate=${filterDates[1]}`, {
             headers: {
               'Authorization': `Bearer ${token}`,
               'Content-Type': 'application/json'
@@ -134,7 +141,7 @@ export const UserProvider = ({ children }: React.PropsWithChildren<{}>) => {
     }
 
     return (
-        <UserContext.Provider value={{ tableData, filterType, darkMode, darkTheme, lightTheme, setDarkMode, getData, setFilterType, setFilterSearchString, setFilterDates}}>
+        <UserContext.Provider value={{ tableData, filterType, darkMode, darkTheme, lightTheme, setDarkMode, getData, setFilterType, setFilterTypes, setFilterSearchString, setFilterDates}}>
           {children}
         </UserContext.Provider>
       );

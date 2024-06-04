@@ -15,7 +15,7 @@ namespace Api.Repositories
         Task<Order> GetOrderById(string id);
         Task<IEnumerable<Order>> GetOrdersByType(CancellationToken cancellationToken, OrderTypes type);
         Task<IEnumerable<Order>> GetOrdersByString(CancellationToken cancellationToken, string searchString);
-        Task<IEnumerable<Order>> SearchOrders(CancellationToken cancellationToken, string? searchString, OrderTypes? orderType, string? startDate, string? endDate);
+        Task<IEnumerable<Order>> SearchOrders(CancellationToken cancellationToken, string? searchString, string? orderTypes, string? startDate, string? endDate);
         Task AddOrder(Order order);
         Task UpdateOrder(Order order);
         Task DeleteOrder(string id);

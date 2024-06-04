@@ -1,13 +1,14 @@
-import * as React from 'react';
 import Button from '@mui/material/Button';
 import Stack from '@mui/material/Stack';
 import DropdownSelect from './DropdownSelect.js';
+import MultiSelectDropdownProps from './DropdownMultiSelect.js';
 import CreateOrderButton from './CreateOrderButton.js';
 import Search from './Search.js';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { useSession } from '../contexts/SessionContext.js';
 import { useUserContext } from '../contexts/UserContext.js';
 import DateSelect from './DateSelect.js';
+import { useState } from 'react';
 
 const uri = 'https://localhost:7045/api/Orders';
 
@@ -16,11 +17,12 @@ interface OrderOptionsBarProps {
 }
 
 const OrderOptionsBar: React.FC<OrderOptionsBarProps> = ({ apiRef }) => {
-  const [orderTypeFilter, setOrderTypeFilter] = React.useState({
+  const [orderTypeFilter, setOrderTypeFilter] = useState({
     orderType: '',
   });
+  const [selectedOrderTypes, setSelectedOrderTypes] = useState([]);
   const {getToken} = useSession();
-  const {setFilterType, getData} = useUserContext();
+  const {setFilterType, setFilterTypes, getData} = useUserContext();
 
   const handleOrderTypeFilterChange = (event: { target: { name: any; value: any; }; }) => {
     const { name, value } = event.target;
@@ -29,6 +31,12 @@ const OrderOptionsBar: React.FC<OrderOptionsBarProps> = ({ apiRef }) => {
       [name]: value
     }));
     setFilterType(value);
+  };
+
+  const handleOrderTypeChange = (event: React.ChangeEvent<{}>, value: any[]) => {
+    setSelectedOrderTypes(value);
+    setFilterTypes(value);
+    console.log(value)
   };
 
   const deleteOrder = (id: string) => {
@@ -69,11 +77,16 @@ const OrderOptionsBar: React.FC<OrderOptionsBarProps> = ({ apiRef }) => {
             <Search></Search>
             <CreateOrderButton></CreateOrderButton>
             <Button onClick={deleteHandler} variant="contained"><DeleteIcon style={{paddingRight: 10}}></DeleteIcon> Delete Selected</Button>
-            <DropdownSelect
+            {/* <DropdownSelect
             id='orderTypeDropdown'
             name="orderType"
             value={orderTypeFilter.orderType}
-            onChange={handleOrderTypeFilterChange}></DropdownSelect>
+            onChange={handleOrderTypeFilterChange}></DropdownSelect> */}
+
+            <MultiSelectDropdownProps 
+            id='orderTypeDropdown'
+            value={selectedOrderTypes}
+            onChange={handleOrderTypeChange}></MultiSelectDropdownProps>
             <DateSelect></DateSelect>
         </Stack>
     </div>
