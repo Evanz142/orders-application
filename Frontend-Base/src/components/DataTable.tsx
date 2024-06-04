@@ -56,28 +56,28 @@ const DataTable: React.FC<DataTableProps> = ({ apiRef }) => {
   const { tableData } = useUserContext();
 
   return (
-    <div style={{ minHeight: '100%', width: '98%', margin: '0 auto', textAlign: 'center' }}>
-      <DataGrid
-        autoHeight {...tableData}
-        rows={tableData}
-        columns={columns()}
-        apiRef={apiRef}
-        disableColumnFilter
-        disableColumnSelector
-        disableDensitySelector
-        columnVisibilityModel={{
-          createdDate: false,
-        }}
-        initialState={{
-          pagination: {
-            paginationModel: { page: 0, pageSize: 12 },
-          },
-        }}
-        pageSizeOptions={[6, 12, 24]}
-        checkboxSelection
-        getRowClassName={(params) => 'data-grid-row'}
-      />
-    </div>
+      <div style={{ minHeight: '100%', width: '98%', margin: '0 auto', textAlign: 'center' }}>
+        <DataGrid
+          autoHeight {...tableData}
+          rows={tableData}
+          columns={columns()}
+          apiRef={apiRef}
+          disableColumnFilter
+          disableColumnSelector
+          disableDensitySelector
+          columnVisibilityModel={{
+            createdDate: false,
+          }}
+          initialState={{
+            pagination: {
+              paginationModel: { page: 0, pageSize: 12 },
+            },
+          }}
+          pageSizeOptions={[6, 12, 24]}
+          checkboxSelection
+          getRowClassName={(params) => 'data-grid-row'}
+        />
+      </div>
   );
 };
 

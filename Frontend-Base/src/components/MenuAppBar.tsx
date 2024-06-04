@@ -12,14 +12,10 @@ import Drawer from '@mui/material/Drawer/Drawer';
 import SideDrawer from './SideDrawer.tsx';
 import { useSession } from '../contexts/SessionContext';
 
-const sus = 1;
-const sus2 = 2;
-
 interface MenuAppBarProps {
   textValue: string;
 }
 const MenuAppBar: React.FC<MenuAppBarProps> = ({ textValue }) => {
-  const [auth, setAuth] = React.useState(true);
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [open, setOpen] = React.useState(false);
   const { session, logout } = useSession();

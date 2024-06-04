@@ -1,5 +1,6 @@
 import React, { ReactNode, useContext, useEffect, useState } from "react"
 import { useSession } from "./SessionContext";
+import { Theme, createTheme } from "@mui/material";
 
 const uri = 'https://localhost:7045/api/Orders';
 interface Order {
@@ -51,6 +52,10 @@ interface UserContextType {
   // define interface for UserContext
   tableData: Order[],
   filterType: number,
+  darkMode: boolean,
+  darkTheme: Theme,
+  lightTheme: Theme,
+  setDarkMode: (boolean) => void,
   setFilterType: (number) => void,
   setFilterSearchString: (string) => void,
   setFilterDates: (any) => void,
@@ -66,6 +71,19 @@ export const UserProvider = ({ children }: React.PropsWithChildren<{}>) => {
     const [filterType, setFilterType] = useState<number>(0);
     const [filterSearchString, setFilterSearchString] = useState<string>("");
     const [filterDates, setFilterDates] = useState<string[]>([]);
+    const [darkMode, setDarkMode] = useState<boolean>();
+
+    const darkTheme = createTheme({
+      palette: {
+        mode: 'dark',
+      },
+    });
+    
+    const lightTheme = createTheme({
+      palette: {
+        mode: 'light',
+      },
+    });
 
     // update the data whenever the order type filter or search filter string changes
     
@@ -116,7 +134,7 @@ export const UserProvider = ({ children }: React.PropsWithChildren<{}>) => {
     }
 
     return (
-        <UserContext.Provider value={{ tableData, filterType, getData, setFilterType, setFilterSearchString, setFilterDates}}>
+        <UserContext.Provider value={{ tableData, filterType, darkMode, darkTheme, lightTheme, setDarkMode, getData, setFilterType, setFilterSearchString, setFilterDates}}>
           {children}
         </UserContext.Provider>
       );

@@ -22,7 +22,7 @@ namespace Api.Repositories
             return await _context.Orders.ToListAsync(cancellationToken);
         }
 
-        public async Task<IEnumerable<BarChartDataDto>> GetBarData()
+        public async Task<IEnumerable<BarChartDataDto>> GetBarData(CancellationToken cancellationToken)
         {
             var orderTypes = await _context.Orders
                 .GroupBy(o => o.OrderType)
@@ -31,7 +31,9 @@ namespace Api.Repositories
                     OrderType = g.Key,
                     Count = g.Count()
                 })
-                .ToListAsync();
+                .ToListAsync(cancellationToken);
+
+            cancellationToken.ThrowIfCancellationRequested();
 
             // Process the data in-memory
             var barData = orderTypes
@@ -42,10 +44,12 @@ namespace Api.Repositories
                 })
                 .ToList();
 
+            cancellationToken.ThrowIfCancellationRequested();
+
             return barData;
         }
 
-        public async Task<IEnumerable<LineChartDataDto>> GetChartData()
+        public async Task<IEnumerable<LineChartDataDto>> GetChartData(CancellationToken cancellationToken)
         {
             var orders = await _context.Orders
                 .Select(o => new
@@ -54,7 +58,9 @@ namespace Api.Repositories
                     o.CreatedDate.Year,
                     o.CreatedDate.Month
                 })
-                .ToListAsync();
+                .ToListAsync(cancellationToken);
+
+            cancellationToken.ThrowIfCancellationRequested();
 
             var earliestOrderDate = orders.Min(o => new DateTime(o.Year, o.Month, 1));
             var currentDate = DateTime.Now;
@@ -71,6 +77,8 @@ namespace Api.Repositories
                 })
                 .ToList();
 
+            cancellationToken.ThrowIfCancellationRequested();
+
             return chartData;
         }
 
@@ -86,7 +94,7 @@ namespace Api.Repositories
             return months;
         }
 
-        public async Task<IEnumerable<PieChartDataDto>> GetPieData()
+        public async Task<IEnumerable<PieChartDataDto>> GetPieData(CancellationToken cancellationToken)
         {
             var orders = await _context.Orders
                 .GroupBy(o => o.CustomerName)
@@ -95,7 +103,9 @@ namespace Api.Repositories
                     CustomerName = g.Key,
                     OrderCount = g.Count()
                 })
-                .ToListAsync();
+                .ToListAsync(cancellationToken);
+
+            cancellationToken.ThrowIfCancellationRequested();
 
             // Process the data in-memory to create pie chart data
             var pieData = orders
@@ -107,6 +117,8 @@ namespace Api.Repositories
                 })
                 .ToList();
 
+            cancellationToken.ThrowIfCancellationRequested();
+
             return pieData;
         }
 
@@ -115,22 +127,22 @@ namespace Api.Repositories
             return await _context.Orders.FindAsync(id);
         }
 
-        public async Task<IEnumerable<Order>> GetOrdersByType(OrderTypes type)
+        public async Task<IEnumerable<Order>> GetOrdersByType(CancellationToken cancellationToken, OrderTypes type)
         {
-            return await _context.Orders.Where(o => o.OrderType == type).ToListAsync();
+            return await _context.Orders.Where(o => o.OrderType == type).ToListAsync(cancellationToken);
         }
 
-        public async Task<IEnumerable<Order>> GetOrdersByString(string searchString)
+        public async Task<IEnumerable<Order>> GetOrdersByString(CancellationToken cancellationToken, string searchString)
         {
             searchString = searchString.ToLower();
             return await _context.Orders
                 .Where(o => o.Id.ToLower().Contains(searchString)
                             || o.CustomerName.ToLower().Contains(searchString)
                             || o.CreatedByUsername.ToLower().Contains(searchString))
-                .ToListAsync();
+                .ToListAsync(cancellationToken);
         }
 
-        public async Task<IEnumerable<Order>> SearchOrders(string? searchString, OrderTypes? orderType, string? startDate, string? endDate)
+        public async Task<IEnumerable<Order>> SearchOrders(CancellationToken cancellationToken, string? searchString, OrderTypes? orderType, string? startDate, string? endDate)
         {
             IQueryable<Order> query = _context.Orders;
 
@@ -142,17 +154,23 @@ namespace Api.Repositories
                                           || o.CreatedByUsername.ToLower().Contains(searchString));
             }
 
+            cancellationToken.ThrowIfCancellationRequested();
+
             if (orderType != 0 && orderType.HasValue)
             {
                 query = query.Where(o => o.OrderType == orderType);
             }
 
+            cancellationToken.ThrowIfCancellationRequested();
+
             if (!string.IsNullOrWhiteSpace(startDate) && DateTime.TryParse(startDate, out DateTime startDateTime))
             {
-                startDateTime = DateTime.SpecifyKind(startDateTime.Date.AddTicks(1), DateTimeKind.Utc); // Ensure UTC
+                startDateTime = DateTime.SpecifyKind(startDateTime.Date.AddTicks(100), DateTimeKind.Utc); // Ensure UTC
                 Console.WriteLine("Start date filter after: "+startDateTime);
                 query = query.Where(o => o.CreatedDate >= startDateTime);
             }
+
+            cancellationToken.ThrowIfCancellationRequested();
 
             if (!string.IsNullOrWhiteSpace(endDate) && DateTime.TryParse(endDate, out DateTime endDateTime))
             {
@@ -161,9 +179,12 @@ namespace Api.Repositories
                 query = query.Where(o => o.CreatedDate <= endDateTime);
             }
 
-            return await query.ToListAsync();
+            cancellationToken.ThrowIfCancellationRequested();
+
+            return await query.ToListAsync(cancellationToken);
         }
 
+        // No cancellation token on these three endpoints below
         public async Task AddOrder(Order order)
         {
             _context.Orders.Add(order);

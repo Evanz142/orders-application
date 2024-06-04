@@ -1,17 +1,9 @@
 import * as React from 'react';
-import Backdrop from '@mui/material/Backdrop';
-import Box from '@mui/material/Box';
-import Modal from '@mui/material/Modal';
-import Fade from '@mui/material/Fade';
-import Button from '@mui/material/Button';
-import TextField from '@mui/material/TextField';
-import Typography from '@mui/material/Typography';
 import AddIcon from '@mui/icons-material/Add';
 import DropdownSelect from './DropdownSelect.js';
-import Stack from '@mui/material/Stack';
-import DialogActions from '@mui/material/DialogActions';
 import { useSession } from '../contexts/SessionContext.js';
 import { useUserContext } from '../contexts/UserContext.js';
+import { Alert, Snackbar, Modal, Backdrop, Box, Fade, Button, TextField, Typography, Stack, DialogActions } from '@mui/material';
 
 
 const style = {
@@ -43,6 +35,15 @@ const CreateOrderButton: React.FC<CreateOrderButtonProps> = ({  }) => {
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
   const { getToken } = useSession();
+  const [snackbarOpen, setSnackbarOpen] = React.useState(false);
+
+  const handleSnackbarClose = (event?: React.SyntheticEvent | Event, reason?: string) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+
+    setSnackbarOpen(false);
+  };
   const generateID = () => {
     const chars = "AaBbCcDdEeFf1234567890";
     return [8,4,4,4,12].map(n => Array.from({ length: n }, () => chars[Math.floor(Math.random() * chars.length)]).join("")).join("-");
@@ -85,7 +86,8 @@ const CreateOrderButton: React.FC<CreateOrderButtonProps> = ({  }) => {
         getData();
       })
       .catch(error => console.error('Unable to add item.', error));
-
+    
+    setSnackbarOpen(true);
     handleClose();
   }
 
@@ -143,7 +145,6 @@ const CreateOrderButton: React.FC<CreateOrderButtonProps> = ({  }) => {
             </Stack>
             
             <br></br>
-            {/* <Button onClick={handleSubmit} variant="contained">Submit</Button> */}
             <DialogActions>
               <Button onClick={handleClose}>Cancel</Button>
               <Button onClick={handleSubmit}>Submit</Button>
@@ -151,6 +152,17 @@ const CreateOrderButton: React.FC<CreateOrderButtonProps> = ({  }) => {
           </Box>
         </Fade>
       </Modal>
+
+      <Snackbar open={snackbarOpen} autoHideDuration={3200} onClose={handleSnackbarClose}>
+        <Alert
+          onClose={handleSnackbarClose}
+          severity="success"
+          variant="filled"
+          sx={{ width: '100%' }}
+        >
+          Order Created!
+        </Alert>
+      </Snackbar>
     </div>
   );
 }

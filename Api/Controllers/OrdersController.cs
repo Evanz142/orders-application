@@ -31,31 +31,31 @@ namespace Api.Controllers
 
         [HttpGet("BarData")]
         [Authorize]
-        public async Task<ActionResult<IEnumerable<BarChartDataDto>>> GetBarData()
+        public async Task<ActionResult<IEnumerable<BarChartDataDto>>> GetBarData(CancellationToken cancellationToken)
         {
-            var barData = await _repository.GetBarData();
+            var barData = await _repository.GetBarData(cancellationToken);
             return Ok(barData);
         }
 
         [HttpGet("ChartData")]
         [Authorize]
-        public async Task<ActionResult<IEnumerable<LineChartDataDto>>> GetChartData()
+        public async Task<ActionResult<IEnumerable<LineChartDataDto>>> GetChartData(CancellationToken cancellationToken)
         {
-            var chartData = await _repository.GetChartData();
+            var chartData = await _repository.GetChartData(cancellationToken);
             return Ok(chartData);
         }
 
         [HttpGet("PieData")]
         [Authorize]
-        public async Task<ActionResult<IEnumerable<PieChartDataDto>>> GetPieData()
+        public async Task<ActionResult<IEnumerable<PieChartDataDto>>> GetPieData(CancellationToken cancellationToken)
         {
-            var pieData = await _repository.GetPieData();
+            var pieData = await _repository.GetPieData(cancellationToken);
             return Ok(pieData);
         }
 
         [HttpGet("{id}")]
         [Authorize]
-        public async Task<ActionResult<Order>> GetOrder(string id)
+        public async Task<ActionResult<Order>> GetOrder(CancellationToken cancellationToken, string id)
         {
             var order = await _repository.GetOrderById(id);
             if (order == null)
@@ -112,23 +112,23 @@ namespace Api.Controllers
 
         [HttpGet("ByType/{type}")]
         [Authorize]
-        public async Task<ActionResult<IEnumerable<Order>>> GetOrdersByType(OrderTypes type)
+        public async Task<ActionResult<IEnumerable<Order>>> GetOrdersByType(CancellationToken cancellationToken, OrderTypes type)
         {
-            return Ok(await _repository.GetOrdersByType(type));
+            return Ok(await _repository.GetOrdersByType(cancellationToken, type));
         }
 
         [HttpGet("ByString/{string}")]
         [Authorize]
-        public async Task<ActionResult<IEnumerable<Order>>> GetOrdersByString(string searchString)
+        public async Task<ActionResult<IEnumerable<Order>>> GetOrdersByString(CancellationToken cancellationToken, string searchString)
         {
-            return Ok(await _repository.GetOrdersByString(searchString));
+            return Ok(await _repository.GetOrdersByString(cancellationToken, searchString));
         }
 
         [HttpGet("Search")]
         [Authorize]
-        public async Task<ActionResult<IEnumerable<Order>>> SearchOrders(string? searchString = "", OrderTypes? orderType = null, string? startDate = "", string? endDate = "")
+        public async Task<ActionResult<IEnumerable<Order>>> SearchOrders(CancellationToken cancellationToken, string? searchString = "", OrderTypes? orderType = null, string? startDate = "", string? endDate = "")
         {
-            return Ok(await _repository.SearchOrders(searchString, orderType, startDate, endDate));
+            return Ok(await _repository.SearchOrders(cancellationToken, searchString, orderType, startDate, endDate));
         }
     }
 }

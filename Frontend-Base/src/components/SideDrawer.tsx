@@ -12,6 +12,7 @@ import ShowChartIcon from '@mui/icons-material/ShowChart';
 import { useNavigate } from 'react-router-dom';
 import { useSession } from '../contexts/SessionContext';
 import AccountCircle from '@mui/icons-material/AccountCircle';
+import DarkModeSwitch from './DarkModeSwitch.tsx';
 
 
 interface SideDrawerProps {
@@ -91,7 +92,7 @@ const SideDrawer: React.FC<SideDrawerProps> = ({ toggleDrawer }) => {
     // ------------ END DATA GENERATION -------------
 
     return (
-        <Box sx={{ width: 250, display: 'flex', flexDirection: 'column', height: '100vh', justifyContent: 'space-between' }} role="presentation" onClick={toggleDrawer(false)}>
+        <Box sx={{ width: 250, display: 'flex', flexDirection: 'column', height: '100vh', justifyContent: 'space-between' }} role="presentation">
         <Box>
           <List>
             {['View Orders', 'Statistics'].map((text) => (
@@ -110,7 +111,11 @@ const SideDrawer: React.FC<SideDrawerProps> = ({ toggleDrawer }) => {
             <Button onClick={testFunction} variant="contained">Generate Test Data</Button>
           </Box>
         </Box>
+        
         <Box>
+            <Box style={{padding: 10}}>
+              <DarkModeSwitch></DarkModeSwitch>
+            </Box>
             <Divider />
             <List>
             <ListItem key={'Logout'} disablePadding>

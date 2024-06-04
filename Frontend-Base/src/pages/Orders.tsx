@@ -9,10 +9,12 @@ import OrderOptionsBar from '../components/OrderOptionsBar.js';
 import DataTable from '../components/DataTable.js';
 import { useGridApiRef } from '@mui/x-data-grid';
 import { useUserContext } from '../contexts/UserContext.js';
+import { CssBaseline, ThemeProvider } from '@mui/material';
+
 
 function OrdersPage() {
   const apiRef = useGridApiRef();
-  const { getData } = useUserContext();
+  const { getData, darkMode, darkTheme, lightTheme } = useUserContext();
 
   useEffect(() => {
     //console.log("Bruh heeheeheehaws");
@@ -20,16 +22,19 @@ function OrdersPage() {
   }, []);
 
   return (
-    <div className="App">
-      <meta name="viewport" content="initial-scale=1, width=device-width" />
-      <MenuAppBar textValue="Order Manager"></MenuAppBar>
-      <br></br>
-      <OrderOptionsBar apiRef={apiRef}></OrderOptionsBar>
-      <br></br>
-      <DataTable 
-        apiRef={apiRef}
-      ></DataTable>
-    </div>
+    <ThemeProvider theme={darkMode ? darkTheme : lightTheme}>
+      <CssBaseline />
+      <div className="App">
+        <meta name="viewport" content="initial-scale=1, width=device-width" />
+        <MenuAppBar textValue="Order Manager"></MenuAppBar>
+        <br></br>
+        <OrderOptionsBar apiRef={apiRef}></OrderOptionsBar>
+        <br></br>
+        <DataTable 
+          apiRef={apiRef}
+        ></DataTable>
+      </div>
+    </ThemeProvider>
   );
 }
 

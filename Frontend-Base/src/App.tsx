@@ -9,8 +9,12 @@ import { UserProvider } from './contexts/UserContext';
 import PrivateRoute from './components/PrivateRoute';
 import SignupPage from './pages/Signup';
 import ForgotPasswordPage from './pages/ForgotPassword';
+import { ThemeProvider } from '@emotion/react';
+import { createTheme } from '@mui/material';
+import { useUserContext } from './contexts/UserContext';
 
 export default function App() {
+
   return (
     <div className="App">
       <SessionProvider>
