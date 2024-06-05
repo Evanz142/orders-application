@@ -24,6 +24,16 @@ builder.Services.AddCors(options =>
     });
 });
 
+builder.Services.AddCors(options =>
+{
+    options.AddDefaultPolicy(builder =>
+    {
+        builder.WithOrigins("https://orders-application.vercel.app")
+               .AllowAnyHeader()
+               .AllowAnyMethod();
+    });
+});
+
 // Configure JWT authentication
 // Bind JWT settings from configuration
 var jwtSettings = new JwtSettings();
