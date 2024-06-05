@@ -1,0 +1,4 @@
+{
+    "appService.defaultWebAppToDeploy": "undefined/subscriptions/ad295f19-2945-44e2-92f7-6b0ace37400b/resourceGroups/myResourceGroup/providers/Microsoft.Web/sites/redtech-coding-challenge-Evan",
+    "appService.deploySubpath": "Api"
+}

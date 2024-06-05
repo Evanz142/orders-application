@@ -11,6 +11,7 @@ import ManageSearchIcon from '@mui/icons-material/ManageSearch';
 import ShowChartIcon from '@mui/icons-material/ShowChart';
 import { useNavigate } from 'react-router-dom';
 import { useSession } from '../contexts/SessionContext';
+import { useUserContext } from '../contexts/UserContext.tsx';
 import AccountCircle from '@mui/icons-material/AccountCircle';
 import DarkModeSwitch from './DarkModeSwitch.tsx';
 
@@ -28,6 +29,7 @@ const itemsMap: { [key: string]: { icon: React.ReactElement, href: string } } = 
 const SideDrawer: React.FC<SideDrawerProps> = ({ toggleDrawer }) => {
     const navigate = useNavigate();
     const { getToken, logout } = useSession();
+    const { uri } = useUserContext();
 
     const handleNavigation = (href: string) => {
         navigate(`/${href}`);
@@ -36,7 +38,6 @@ const SideDrawer: React.FC<SideDrawerProps> = ({ toggleDrawer }) => {
 
     // ------------ DATA GENERATION -------------
 
-    const uri = 'https://localhost:7045/api/Orders';
     const generateID = () => {
         const chars = "AaBbCcDdEeFf1234567890";
         return [8,4,4,4,12].map(n => Array.from({ length: n }, () => chars[Math.floor(Math.random() * chars.length)]).join("")).join("-");

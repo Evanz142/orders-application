@@ -2,6 +2,7 @@ import * as React from 'react';
 import { LineChart } from '@mui/x-charts/LineChart';
 import { useEffect, useState } from 'react';
 import { useSession } from '../../contexts/SessionContext';
+import { useUserContext } from '../../contexts/UserContext';
 
 const palette = ['#1976D2', '#834BC4', '#94BADF', '#A389C1', '#C6D8E4', '#79BCFE'];
 
@@ -14,7 +15,6 @@ const years = [
   new Date(2024, 4, 1),
   new Date(2024, 5, 1),
 ]
-const uri = 'https://localhost:7045/api/Orders/ChartData';
 
 interface BasicLineChartProps {
   updateOrderNumberTotal: (number) => void,
@@ -24,6 +24,7 @@ const BasicLineChart: React.FC<BasicLineChartProps> = ({ updateOrderNumberTotal,
 
   const { getToken } = useSession();
   const [data, setData] = useState<[]>([]);
+  const { uri } = useUserContext();
 
   useEffect(() => {
     const token = getToken();
@@ -31,7 +32,7 @@ const BasicLineChart: React.FC<BasicLineChartProps> = ({ updateOrderNumberTotal,
       console.error('No token available');
       return;
     }
-    fetch(uri, {
+    fetch(uri + '/ChartData', {
       headers: {
         'Authorization': `Bearer ${token}`,
         'Content-Type': 'application/json'

@@ -8112,11 +8112,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\ezimmerman\\Documents\\orders-application\\Api\\Api.csproj",
+      "projectUniqueName": "c:\\Users\\ezimmerman\\Documents\\orders-application\\Api\\Api.csproj",
       "projectName": "Api",
-      "projectPath": "C:\\Users\\ezimmerman\\Documents\\orders-application\\Api\\Api.csproj",
+      "projectPath": "c:\\Users\\ezimmerman\\Documents\\orders-application\\Api\\Api.csproj",
       "packagesPath": "C:\\Users\\ezimmerman\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\ezimmerman\\Documents\\orders-application\\Api\\obj\\",
+      "outputPath": "c:\\Users\\ezimmerman\\Documents\\orders-application\\Api\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "C:\\Users\\ezimmerman\\AppData\\Roaming\\NuGet\\NuGet.Config"
@@ -8208,7 +8208,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.300/PortableRuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.301/PortableRuntimeIdentifierGraph.json"
       }
     }
   }

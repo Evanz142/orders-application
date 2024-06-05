@@ -10,8 +10,6 @@ import { useUserContext } from '../contexts/UserContext.js';
 import DateSelect from './DateSelect.js';
 import { useState } from 'react';
 
-const uri = 'https://localhost:7045/api/Orders';
-
 interface OrderOptionsBarProps {
   apiRef: any; // apiRef for the data table
 }
@@ -22,7 +20,7 @@ const OrderOptionsBar: React.FC<OrderOptionsBarProps> = ({ apiRef }) => {
   });
   const [selectedOrderTypes, setSelectedOrderTypes] = useState([]);
   const {getToken} = useSession();
-  const {setFilterType, setFilterTypes, getData} = useUserContext();
+  const {setFilterType, setFilterTypes, getData, uri} = useUserContext();
 
   const handleOrderTypeFilterChange = (event: { target: { name: any; value: any; }; }) => {
     const { name, value } = event.target;

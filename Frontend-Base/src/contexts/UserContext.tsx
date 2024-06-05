@@ -2,7 +2,6 @@ import React, { ReactNode, useContext, useEffect, useState } from "react"
 import { useSession } from "./SessionContext";
 import { Alert, Snackbar, Theme, createTheme } from "@mui/material";
 
-const uri = 'https://localhost:7045/api/Orders';
 interface Order {
     id: string;
     orderType: any;
@@ -63,6 +62,7 @@ interface UserContextType {
   darkTheme: Theme,
   lightTheme: Theme,
   orderDrafts: OrderDraft[],
+  uri: string,
   setDarkMode: (boolean) => void,
   setFilterType: (number) => void,
   setFilterTypes: (any) => void,
@@ -89,6 +89,8 @@ export const UserProvider = ({ children }: React.PropsWithChildren<{}>) => {
     const [darkMode, setDarkMode] = useState<boolean>();
     const [snackbarOpen, setSnackbarOpen] = useState(false);
     const [snackbarMessage, setSnackbarMessage] = useState<string>("");
+
+    const uri = 'https://redtech-coding-challenge-evan2.azurewebsites.net/api/Orders';
 
     const darkTheme = createTheme({
       palette: {
@@ -172,7 +174,7 @@ export const UserProvider = ({ children }: React.PropsWithChildren<{}>) => {
   
     const deleteDraft = (draft: OrderDraft) => {
       setOrderDrafts(prevDrafts => prevDrafts.filter(d => d !== draft));
-      queueSnackbar("Draft deleted successfully");
+      //queueSnackbar("Draft deleted successfully");
     }
 
     return (
@@ -183,6 +185,7 @@ export const UserProvider = ({ children }: React.PropsWithChildren<{}>) => {
           darkTheme, 
           lightTheme,
           orderDrafts,
+          uri,
           setDarkMode,
           getData, 
           setFilterType, 

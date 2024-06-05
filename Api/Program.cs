@@ -42,12 +42,10 @@ builder.Services.AddAuthentication().AddJwtBearer(o =>
     };
 });
 
-
-
 var app = builder.Build();
+app.UseSwagger();
 if (app.Environment.IsDevelopment())
 {
-    app.UseSwagger();
     app.UseSwaggerUI();
 }
 

@@ -28,8 +28,6 @@ const style = {
   p: 4,
 };
 
-const uri = 'https://localhost:7045/api/Orders';
-
 interface EditOrderButtonProps {
   id: string;
   createdByUsername: string;
@@ -46,7 +44,7 @@ const EditOrderButton: React.FC<EditOrderButtonProps> = ({ id, createdByUsername
     orderType: orderType,
   });
   const { getToken } = useSession();
-  const { getData, queueSnackbar } = useUserContext();
+  const { getData, queueSnackbar, uri } = useUserContext();
   const handleOpen = (event: React.MouseEvent<HTMLButtonElement>) => {
     event.stopPropagation();
     setOpen(true);

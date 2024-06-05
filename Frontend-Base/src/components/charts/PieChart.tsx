@@ -5,9 +5,9 @@ import Typography from '@mui/material/Typography';
 import { PieChart } from '@mui/x-charts/PieChart';
 import { useEffect, useState } from 'react';
 import { useSession } from '../../contexts/SessionContext';
+import { useUserContext } from '../../contexts/UserContext';
 
 const palette = ['#1976D2', '#79BCFE', '#7878CC', '#E5D9F2', '#C6D8E4'];
-const uri = 'https://localhost:7045/api/Orders/PieData';
 
 const pieParams = { 
     height: 200,
@@ -23,6 +23,7 @@ const BasicPieChart: React.FC<BasicPieChartProps> = ({ updateCustomers }) => {
 
   const { getToken } = useSession();
   const [data, setData] = useState<[]>([]);
+  const { uri } = useUserContext();
 
   useEffect(() => {
     const token = getToken();
@@ -31,7 +32,7 @@ const BasicPieChart: React.FC<BasicPieChartProps> = ({ updateCustomers }) => {
       return;
     }
 
-    fetch(uri, {
+    fetch(uri + '/PieData', {
       headers: {
         'Authorization': `Bearer ${token}`,
         'Content-Type': 'application/json'

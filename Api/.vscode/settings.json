@@ -1,0 +1,5 @@
+{
+    "appService.preDeployTask": "publish-release",
+    "appService.deploySubpath": "bin\\Release\\net8.0\\publish",
+    "appService.defaultWebAppToDeploy": "undefined/subscriptions/ad295f19-2945-44e2-92f7-6b0ace37400b/resourceGroups/myResourceGroup/providers/Microsoft.Web/sites/redtech-coding-challenge-Evan2"
+}

@@ -33,8 +33,6 @@ namespace Api.Repositories
                 })
                 .ToListAsync(cancellationToken);
 
-            cancellationToken.ThrowIfCancellationRequested();
-
             // Process the data in-memory
             var barData = orderTypes
                 .Select((g, index) => new BarChartDataDto
@@ -43,8 +41,6 @@ namespace Api.Repositories
                     Label = g.OrderType.ToString()
                 })
                 .ToList();
-
-            cancellationToken.ThrowIfCancellationRequested();
 
             return barData;
         }
@@ -60,8 +56,6 @@ namespace Api.Repositories
                 })
                 .ToListAsync(cancellationToken);
 
-            cancellationToken.ThrowIfCancellationRequested();
-
             var earliestOrderDate = orders.Min(o => new DateTime(o.Year, o.Month, 1));
             var currentDate = DateTime.Now;
 
@@ -76,8 +70,6 @@ namespace Api.Repositories
                     Data = months.Select(m => g.Count(o => o.Year == m.Year && o.Month == m.Month)).ToList()
                 })
                 .ToList();
-
-            cancellationToken.ThrowIfCancellationRequested();
 
             return chartData;
         }
@@ -105,8 +97,6 @@ namespace Api.Repositories
                 })
                 .ToListAsync(cancellationToken);
 
-            cancellationToken.ThrowIfCancellationRequested();
-
             // Process the data in-memory to create pie chart data
             var pieData = orders
                 .Select((g, index) => new PieChartDataDto
@@ -116,8 +106,6 @@ namespace Api.Repositories
                     Label = g.CustomerName
                 })
                 .ToList();
-
-            cancellationToken.ThrowIfCancellationRequested();
 
             return pieData;
         }
@@ -153,8 +141,6 @@ namespace Api.Repositories
                                           || o.CustomerName.ToLower().Contains(searchString)
                                           || o.CreatedByUsername.ToLower().Contains(searchString));
             }
-
-            cancellationToken.ThrowIfCancellationRequested();
             
             if (!string.IsNullOrWhiteSpace(orderTypes))
             {
@@ -164,8 +150,6 @@ namespace Api.Repositories
                 query = query.Where(o => orderTypeList.Contains((int)o.OrderType));
             }
 
-            cancellationToken.ThrowIfCancellationRequested();
-
             if (!string.IsNullOrWhiteSpace(startDate) && DateTime.TryParse(startDate, out DateTime startDateTime))
             {
                 startDateTime = DateTime.SpecifyKind(startDateTime.Date.AddTicks(100), DateTimeKind.Utc); // Ensure UTC (this is also breaking because it returns dates before the start date)
@@ -173,16 +157,12 @@ namespace Api.Repositories
                 query = query.Where(o => o.CreatedDate >= startDateTime);
             }
 
-            cancellationToken.ThrowIfCancellationRequested();
-
             if (!string.IsNullOrWhiteSpace(endDate) && DateTime.TryParse(endDate, out DateTime endDateTime))
             {
                 endDateTime = DateTime.SpecifyKind(endDateTime.Date.AddDays(1).AddTicks(-1), DateTimeKind.Utc); // End of the day in UTC
                 Console.WriteLine("End date filter after: "+endDateTime);
                 query = query.Where(o => o.CreatedDate <= endDateTime);
             }
-
-            cancellationToken.ThrowIfCancellationRequested();
 
             return await query.ToListAsync(cancellationToken);
         }

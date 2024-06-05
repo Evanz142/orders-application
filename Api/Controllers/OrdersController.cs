@@ -12,6 +12,7 @@ using Microsoft.AspNetCore.Authorization;
 namespace Api.Controllers
 {
     [Route("api/[controller]")]
+    //[Route("api/")]
     [ApiController]
     public class OrdersController : ControllerBase
     {

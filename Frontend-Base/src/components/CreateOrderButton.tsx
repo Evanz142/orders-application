@@ -3,7 +3,7 @@ import AddIcon from '@mui/icons-material/Add';
 import DropdownSelect from './DropdownSelect.js';
 import { useSession } from '../contexts/SessionContext.js';
 import { useUserContext } from '../contexts/UserContext.js';
-import { Alert, Snackbar, Modal, Backdrop, Box, Fade, Button, TextField, Typography, Stack, DialogActions, Select, MenuItem } from '@mui/material';
+import { Modal, Backdrop, Box, Fade, Button, TextField, Typography, Stack, DialogActions, Select, MenuItem } from '@mui/material';
 
 
 const style = {
@@ -38,35 +38,37 @@ function formatOrderType(orderType: number): string {
   }
   }
 
-const uri = 'https://localhost:7045/api/Orders';
-
 interface CreateOrderButtonProps {
 
 }
 
 const CreateOrderButton: React.FC<CreateOrderButtonProps> = ({  }) => {
   const [open, setOpen] = React.useState(false);
+  const { getToken, session } = useSession();
   const [formData, setFormData] = React.useState({
-    createdByUsername: '',
+    createdByUsername: session.user.email.match(/^[^@]+/)?.[0] || '',
     customerName: '',
     orderType: 0,
   });
   const [currentDraft, setCurrentDraft] = React.useState({
-    createdByUsername: '',
+    createdByUsername: session.user.email.match(/^[^@]+/)?.[0] || '',
     customerName: '',
     orderType: 0,
   })
-  const { getData, queueSnackbar, addDraft, deleteDraft, orderDrafts } = useUserContext();
+  const { getData, queueSnackbar, addDraft, deleteDraft, orderDrafts, uri } = useUserContext();
   const handleOpen = () => setOpen(true);
   const handleClose = () => {
     setOpen(false);
+    resetFormData();
+  };
+
+  const resetFormData = () => {
     setFormData({ // reset the form so its empty if the user creates another order
-      createdByUsername: '',
+      createdByUsername: session.user.email.match(/^[^@]+/)?.[0] || '',
       customerName: '',
       orderType: 0,
     })
-  };
-  const { getToken } = useSession();
+  }
   
   const generateID = () => {
     const chars = "AaBbCcDdEeFf1234567890";
@@ -94,11 +96,7 @@ const CreateOrderButton: React.FC<CreateOrderButtonProps> = ({  }) => {
     deleteDraft(currentDraft);
 
     queueSnackbar("Draft Saved!");
-    setFormData({ // reset the form so its empty if the user creates another order
-      createdByUsername: '',
-      customerName: '',
-      orderType: 0,
-    })
+    resetFormData();
     handleClose();
   }
 
