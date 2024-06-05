@@ -18,17 +18,9 @@ builder.Services.AddCors(options =>
 {
     options.AddDefaultPolicy(builder =>
     {
-        builder.WithOrigins("http://localhost:5173")
-               .AllowAnyHeader()
-               .AllowAnyMethod();
-    });
-});
-
-builder.Services.AddCors(options =>
-{
-    options.AddDefaultPolicy(builder =>
-    {
-        builder.WithOrigins("https://orders-application.vercel.app")
+        builder.WithOrigins(
+                "http://localhost:5173",
+                "https://orders-application.vercel.app")
                .AllowAnyHeader()
                .AllowAnyMethod();
     });
