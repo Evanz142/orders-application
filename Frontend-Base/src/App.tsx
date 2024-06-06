@@ -3,6 +3,7 @@ import { Routes, Route } from 'react-router-dom';
 
 import OrdersPage from './pages/Orders';
 import StatisticsPage from './pages/Statistics';
+import DemoPage from './pages/Demo';
 import LoginPage from './pages/Login';
 import { SessionProvider } from './contexts/SessionContext';
 import { UserProvider } from './contexts/UserContext';
@@ -37,6 +38,14 @@ export default function App() {
               element={
                 <PrivateRoute>
                   <StatisticsPage />
+                </PrivateRoute>
+              }
+            />
+            <Route
+              path="bruh"
+              element={
+                <PrivateRoute>
+                  <DemoPage />
                 </PrivateRoute>
               }
             />

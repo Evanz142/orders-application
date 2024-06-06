@@ -6,6 +6,8 @@ using System.Threading.Tasks;
 
 namespace Api.Repositories
 {
+
+    // Interface for the Order repository
     public interface IOrderRepository
     {
         Task<IEnumerable<Order>> GetAllOrders(CancellationToken cancellationToken);

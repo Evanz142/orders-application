@@ -13,7 +13,7 @@ import { useNavigate } from 'react-router-dom';
 import { useSession } from '../contexts/SessionContext';
 import { useUserContext } from '../contexts/UserContext.tsx';
 import AccountCircle from '@mui/icons-material/AccountCircle';
-import DarkModeSwitch from './DarkModeSwitch.tsx';
+import CameraAltIcon from '@mui/icons-material/CameraAlt';
 
 
 interface SideDrawerProps {
@@ -24,15 +24,17 @@ const itemsMap: { [key: string]: { icon: React.ReactElement, href: string } } = 
     'View Orders': { icon: <ManageSearchIcon />,  href: 'home'},
     'Statistics': { icon: <ShowChartIcon />, href: 'stats'},
     'Logout': { icon: <AccountCircle />, href: ''},
+    'Demo': { icon: <CameraAltIcon />, href: 'bruh'},
 };
 
 const SideDrawer: React.FC<SideDrawerProps> = ({ toggleDrawer }) => {
     const navigate = useNavigate();
     const { getToken, logout } = useSession();
-    const { uri } = useUserContext();
+    const { uri, clearFilters } = useUserContext();
 
     const handleNavigation = (href: string) => {
         navigate(`/${href}`);
+        clearFilters();
         console.log("Redirecting to " + href);
     };
 
@@ -108,9 +110,21 @@ const SideDrawer: React.FC<SideDrawerProps> = ({ toggleDrawer }) => {
             ))}
           </List>
           <Divider />
-          <Box sx={{ display: 'flex', justifyContent: 'center', mt: 2 }}>
+          {/* <Box sx={{ display: 'flex', justifyContent: 'center', mt: 2 }}>
             <Button onClick={testFunction} variant="contained">Generate Test Data</Button>
-          </Box>
+          </Box> */}
+
+          
+          <List>
+            <ListItem key={'Demo'} disablePadding>
+              <ListItemButton onClick={() => handleNavigation('bruh')}>
+                <ListItemIcon>
+                  <CameraAltIcon />
+                </ListItemIcon>
+                <ListItemText primary={'Demo'} />
+              </ListItemButton>
+            </ListItem>
+            </List>
         </Box>
         
         <Box>

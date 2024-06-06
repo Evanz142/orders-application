@@ -33,7 +33,7 @@ namespace Api.Repositories
                 })
                 .ToListAsync(cancellationToken);
 
-            // Process the data in-memory
+            // convert to data transfer object for clarity
             var barData = orderTypes
                 .Select((g, index) => new BarChartDataDto
                 {
@@ -61,6 +61,7 @@ namespace Api.Repositories
 
             var months = GetMonthRange(earliestOrderDate, currentDate);
 
+            // convert to data transfer object for clarity
             var chartData = orders
                 .GroupBy(o => o.CreatedByUsername)
                 .Select(g => new LineChartDataDto
@@ -97,7 +98,7 @@ namespace Api.Repositories
                 })
                 .ToListAsync(cancellationToken);
 
-            // Process the data in-memory to create pie chart data
+            // convert to data transfer object for clarity
             var pieData = orders
                 .Select((g, index) => new PieChartDataDto
                 {
@@ -150,17 +151,19 @@ namespace Api.Repositories
                 query = query.Where(o => orderTypeList.Contains((int)o.OrderType));
             }
 
+            // Filter for getting dates only after specified start date
             if (!string.IsNullOrWhiteSpace(startDate) && DateTime.TryParse(startDate, out DateTime startDateTime))
             {
                 startDateTime = DateTime.SpecifyKind(startDateTime.Date.AddTicks(100), DateTimeKind.Utc); // Ensure UTC (this is also breaking because it returns dates before the start date)
-                Console.WriteLine("Start date filter after: "+startDateTime);
+                //Console.WriteLine("Start date filter after: "+startDateTime);
                 query = query.Where(o => o.CreatedDate >= startDateTime);
             }
 
+            // Filter for getting dates only before specified end date
             if (!string.IsNullOrWhiteSpace(endDate) && DateTime.TryParse(endDate, out DateTime endDateTime))
             {
                 endDateTime = DateTime.SpecifyKind(endDateTime.Date.AddDays(1).AddTicks(-1), DateTimeKind.Utc); // End of the day in UTC
-                Console.WriteLine("End date filter after: "+endDateTime);
+                //Console.WriteLine("End date filter after: "+endDateTime);
                 query = query.Where(o => o.CreatedDate <= endDateTime);
             }
 

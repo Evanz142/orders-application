@@ -10,11 +10,11 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers();
 builder.Services.AddDbContext<OrderContext>(options =>
     options.UseNpgsql(builder.Configuration.GetConnectionString("MyDbContext")));
-builder.Services.AddScoped<IOrderRepository, OrderRepository>(); // register repository layer
+builder.Services.AddScoped<IOrderRepository, OrderRepository>(); // Register repository layer (using scoped)
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
-builder.Services.AddCors(options =>
+builder.Services.AddCors(options => // Add CORS for my two URLS
 {
     options.AddDefaultPolicy(builder =>
     {
@@ -26,14 +26,16 @@ builder.Services.AddCors(options =>
     });
 });
 
-// Configure JWT authentication
+// ------ JWT AUTH ------
+
 // Bind JWT settings from configuration
 var jwtSettings = new JwtSettings();
 builder.Configuration.Bind("Jwt", jwtSettings);
-var supabaseSignatureKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtSettings.Key));
+
+var supabaseSignatureKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtSettings.Key)); // Supabase's key for verification 
 var validIssuer = "https://hfhrezvxbnkvvkujmswp.supabase.co/auth/v1";
 var validAudiences = new List<string>() { "authenticated" };
-builder.Services.AddAuthentication().AddJwtBearer(o =>
+builder.Services.AddAuthentication().AddJwtBearer(o => // Add the authentication to the builder
 {   
     o.TokenValidationParameters = new TokenValidationParameters
     {
@@ -43,6 +45,7 @@ builder.Services.AddAuthentication().AddJwtBearer(o =>
         ValidIssuer = validIssuer
     };
 });
+
 
 var app = builder.Build();
 app.UseSwagger();
@@ -59,7 +62,7 @@ app.UseHttpsRedirection();
 
 app.UseCors();
 
-app.UseAuthentication(); // Add this line to enable authentication middleware
+app.UseAuthentication(); // Enable authentication middleware
 app.UseAuthorization();
 
 app.MapControllers();

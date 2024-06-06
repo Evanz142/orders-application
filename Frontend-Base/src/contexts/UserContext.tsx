@@ -72,6 +72,7 @@ interface UserContextType {
   queueSnackbar: (string) => void,
   addDraft: (OrderDraft) => void,
   deleteDraft: (OrderDraft) => void,
+  clearFilters: () => void,
 }
 
 const UserContext = React.createContext<UserContextType | undefined>(undefined);
@@ -91,6 +92,7 @@ export const UserProvider = ({ children }: React.PropsWithChildren<{}>) => {
     const [snackbarMessage, setSnackbarMessage] = useState<string>("");
 
     const uri = 'https://redtech-coding-challenge-evan2.azurewebsites.net/api/Orders';
+    //const uri = 'https://localhost:7045/api/Orders';
 
     const darkTheme = createTheme({
       palette: {
@@ -177,6 +179,12 @@ export const UserProvider = ({ children }: React.PropsWithChildren<{}>) => {
       //queueSnackbar("Draft deleted successfully");
     }
 
+    const clearFilters = () => {
+      setFilterDates([]);
+      setFilterTypes([]);
+      setFilterSearchString("");
+    }
+
     return (
         <UserContext.Provider value={{ 
           tableData, 
@@ -195,6 +203,7 @@ export const UserProvider = ({ children }: React.PropsWithChildren<{}>) => {
           queueSnackbar, 
           addDraft,
           deleteDraft,
+          clearFilters,
           }}>
 
           {children}
